@@ -55,15 +55,20 @@ namespace SatorImaging.HUlid
 
 
         ///<summary>Generate sequential Half-ULID value.</summary>
+        ///<remarks>Init() is automatically called when maximum id for current creation time is reached.</remarks>
         public static long Next(int offset = 1)
         {
             //InitTimeBits();
+            if (_currentValue == ID_MAX)
+                Init(DEFAULT_START_VALUE, _currentOriginYear);
+
             _currentValue += Math.Max(1, offset);
             return _timeBits | _currentValue;
         }
 
         ///<summary>Generate Half-ULID value with random number.</summary>
         ///<remarks>NOTE: identical value could be returned for same creation time.</remarks>
+        [Obsolete("This method does NOT check conflict to values generated before.")]
         public static long Random()
         {
             //InitTimeBits();

@@ -4,9 +4,9 @@
 Half-ULID (HUlid) is a 64-bit shrinked version of [ULID](https://github.com/ulid/spec).
 Max 2,097,152 of IDs can be created for every milliseconds.
 
-- Unity Package Manger URLs
+- Unity Package Manger Installation URLs
     - Latest: https://github.com/sator-imaging/Half-Ulid.git
-    - v1.0.0: https://github.com/sator-imaging/Half-Ulid.git#v1.0.0
+    - v1.1.0: https://github.com/sator-imaging/Half-Ulid.git#v1.1.0
 
 
 

@@ -1,7 +1,7 @@
 {
   "name": "com.sator-imaging.half-ulid",
   "displayName": "Half-ULID for C# / .NET",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "unity": "2021.3",
   "description": "Half-ULID (HUlid) is a 64-bit shrinked version of ULID.",
   "author": {
