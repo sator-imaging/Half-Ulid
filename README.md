@@ -1,10 +1,10 @@
 <!-- omit in toc -->
 # Half-ULID for C# / .NET
 
-Half-ULID (HUlid) is a 64-bit shrinked version of [ULID](https://github.com/ulid/spec).
+Half-ULID (HUlid) is a 64-bit (`long`) shrinked version of [ULID](https://github.com/ulid/spec).
 Max 2,097,152 of IDs can be created for every milliseconds.
 
-- Unity Package Manger Installation URLs
+- Unity Package Manager Installation URLs
     - Latest: https://github.com/sator-imaging/Half-Ulid.git
     - v1.1.0: https://github.com/sator-imaging/Half-Ulid.git#v1.1.0
 
@@ -16,7 +16,7 @@ Max 2,097,152 of IDs can be created for every milliseconds.
  +  
 `21-bit value` from 0 to 2,097,151
 
-*NOTE*: `YearOffset` supports for 128 years from origin. (A.D. 2,150 December 31 by default)
+*NOTE*: `YearOffset` supports for 128 years from origin. (until A.D. 2150 Dec 31 by default)
 
 
 
