@@ -6,7 +6,7 @@ Max 2,097,152 of IDs can be created for every milliseconds.
 
 - Unity Package Manager Installation URLs
     - Latest: https://github.com/sator-imaging/Half-Ulid.git
-    - v1.1.0: https://github.com/sator-imaging/Half-Ulid.git#v1.1.0
+    - v1.2.0: https://github.com/sator-imaging/Half-Ulid.git#v1.2.0
 
 
 
@@ -33,7 +33,10 @@ var id = HalfUlid.Next();        // generate sequential id.
 id = HalfUlid.Next(offset: 10);  // custom offset;
 id = HalfUlid.Next(10);
 id = HalfUlid.Next(10);
-var randomId = HaldUlid.Random();  // generate random id.
+
+// generate id using random number and sequential value.
+var randomId = HaldUlid.Random();
+var seqValue = randomId & HalfUlid.RANDOM_ID_BITMASK;  // retrieve sequential part
 
 // retrieve creation time in UTC format.
 var createdAt = id.ToHUlidDateTime();

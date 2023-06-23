@@ -10,77 +10,167 @@ namespace SatorImaging.Tests.HUlid
 {
     public class HalfUlidTests
     {
-        static void VerboseLog(string msg, long val, int originYear = -1)
+        const string FMT_TIME = "yyyy-MM-dd HH:mm:ss.fff";
+
+        static void VerboseLog(string msg, long val, int originYear = HalfUlid.YEAR_USE_CURRENT, string suffix = "")
         {
-            Debug.Log(msg + "\t" + val.ToString() + " \t " + val.ToHUlidDateTime(originYear).ToString("yyyy-MM-dd HH:mm:ss.fff") + " \t Value: " + val.ToHUlidValue());
+            Debug.Log($"{msg} \t {val,32} \t {val.ToHUlidDateTime(originYear).ToString(FMT_TIME)}  ( yr:{HalfUlid.CurrentOriginYear} query:{originYear} ) \t Value: {val.ToHUlidValue(),-10} \t {suffix}");
+        }
+
+        static long NextAndLog(string msg, int offset = -1, int originYear = HalfUlid.YEAR_USE_CURRENT)
+        {
+            var ret = HalfUlid.Next(offset);
+            if (string.IsNullOrWhiteSpace(msg))
+                VerboseLog($"{($"Next({offset}): "),-12}", ret, originYear);
+            else
+                VerboseLog($"{msg} \t {($"Next({offset}): "),12}", ret, originYear);
+            return ret;
+        }
+
+        static long RandomAndLog(string msg, int originYear = HalfUlid.YEAR_USE_CURRENT)
+        {
+            var ret = HalfUlid.Random();
+            var seq = ret & HalfUlid.RANDOM_ID_BITMASK;
+            if (string.IsNullOrWhiteSpace(msg))
+                VerboseLog($"{("Random(): "),-12}", ret, originYear, "Sequential Value: " + seq);
+            else
+                VerboseLog($"{msg} \t {("Random(): "),12}", ret, originYear, "Sequential Value: " + seq);
+            return ret;
         }
 
 
-        [SetUp]
-        public void Setup()
+
+        [Test]
+        [Order(-100)]
+        public void BeforeInitializationTest()
         {
-            var val = HalfUlid.Next();
-            VerboseLog("HalfUlit.Next() w/o Init(): ", val);
-            Debug.Log("");
+            NextAndLog("# Generate Half-ULID before Init()\n");
         }
 
 
         [Test]
-        public void InitAndGeneratorTest()
+        public void GeneratorTest()
         {
             long val;
 
+            HalfUlid.Init();
+            Debug.Log("# Init()");
+
+            val = NextAndLog("");
+            Assert.That(HalfUlid.GetValue(val) == 0);
+
+            val = NextAndLog("");
+            Assert.That(HalfUlid.GetValue(val) == 1);
+
+            val = NextAndLog("");
+            Assert.That(HalfUlid.GetValue(val) == 2);
+
+
+            Debug.Log("\n# Init(100)");
             HalfUlid.Init(100);
-            val = HalfUlid.Next();
+
+            val = NextAndLog("");
             Assert.That(HalfUlid.GetValue(val) == 101);
-            VerboseLog("Sequential Value: ", val);
 
-            val = HalfUlid.Next();
+            val = NextAndLog("");
             Assert.That(HalfUlid.GetValue(val) == 102);
-            VerboseLog("Sequential Value: ", val);
 
-            val = HalfUlid.Next();
+            val = NextAndLog("");
             Assert.That(HalfUlid.GetValue(val) == 103);
-            VerboseLog("Sequential Value: ", val);
 
             //random
-            val = HalfUlid.Random();
-            VerboseLog("    Random Value: ", val);
+            val = RandomAndLog("");
+            val = RandomAndLog("");
+            val = RandomAndLog("");
 
-            val = HalfUlid.Random();
-            VerboseLog("    Random Value: ", val);
-
-            val = HalfUlid.Random();
-            VerboseLog("    Random Value: ", val);
 
             //next() again
-            val = HalfUlid.Next();
-            Assert.That(HalfUlid.GetValue(val) == 104);
-            VerboseLog("Sequential Value: ", val);
+            val = NextAndLog("", 10);
+            Assert.That(HalfUlid.GetValue(val) == 116);
 
-            val = HalfUlid.Next();
-            Assert.That(HalfUlid.GetValue(val) == 105);
-            VerboseLog("Sequential Value: ", val);
+            val = NextAndLog("", 10);
+            Assert.That(HalfUlid.GetValue(val) == 126);
 
-            val = HalfUlid.Next();
-            Assert.That(HalfUlid.GetValue(val) == 106);
-            VerboseLog("Sequential Value: ", val);
+            val = NextAndLog("", 10);
+            Assert.That(HalfUlid.GetValue(val) == 136);
+        }
 
 
-            //yearOrigin
-            HalfUlid.Init(-100, 2000);
-            var year2000 = HalfUlid.Next();
+        [Test]
+        public void InitializeTest()
+        {
+            //originYear
+            Debug.Log("# Init() with originYear option");
+
+            HalfUlid.Init(originYear: -1);
+            NextAndLog($"Init(originYear: {-1})");
+
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 999);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 999})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 128);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 128})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 127);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 127})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 126);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 126})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 1);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 1})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year + 1);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 1})");
+
+            HalfUlid.Init(originYear: DateTime.UtcNow.Year + 310);
+            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 310})");
+
+
+            //use current
+            Debug.Log("\n# HalfUlid.YEAR_USE_CURRENT to use last set value");
+
+            HalfUlid.Init(originYear: 2000);
+            HalfUlid.Init();
+            Debug.Log($"Init(originYear: 2000) -> Init():      \t\t Origin Year: " + HalfUlid.CurrentOriginYear);
+            Assert.That(HalfUlid.CurrentOriginYear == 2000);
+
+            HalfUlid.Init(originYear: 2000);
+            HalfUlid.Init(originYear: 0);
+            Debug.Log($"Init(originYear: 2000) -> Init(yr:0):    \t Origin Year: " + HalfUlid.CurrentOriginYear);
+            Assert.That(HalfUlid.CurrentOriginYear == HalfUlid.DEFAULT_YEAR_ORIGIN);
+
+            HalfUlid.Init(originYear: 2000);
+            HalfUlid.Init(originYear: 310);
+            Debug.Log($"Init(originYear: 2000) -> Init(yr:310):   \t Origin Year: " + HalfUlid.CurrentOriginYear);
+            Assert.That(HalfUlid.CurrentOriginYear == HalfUlid.DEFAULT_YEAR_ORIGIN);
+
+
+            //others
+            Debug.Log("\n# ToHUlidDateTime() with originYear option");
+
+            HalfUlid.Init(int.MinValue, 2000);
+            var year2000 = NextAndLog("Init(int.MinValue, 2000)");
             var year2000dt = year2000.ToHUlidDateTime();
-            HalfUlid.Init(-100, 2023);
-            var year2023 = HalfUlid.Next();
+
+            HalfUlid.Init(int.MaxValue, 2023);
+            var year2023 = NextAndLog("Init(int.MaxValue, 2023)");
             var year2023dt = year2023.ToHUlidDateTime();
 
             Assert.That(year2000dt.Year == year2023dt.Year);
             Assert.That(year2000.ToHUlidDateTime(2000).Year == year2023.ToHUlidDateTime(2023).Year);
             Assert.That(year2000.ToHUlidDateTime().Year != year2023.ToHUlidDateTime().Year);
 
-            VerboseLog("Year Origin 2000: ", year2000, 2000);
-            VerboseLog("Year Origin 2023: ", year2023, 2023);
+
+            VerboseLog("Origin Year 2000: ", year2000, 2000);
+            VerboseLog("Origin Year 2023: ", year2023, 2023);
+
+            VerboseLog("Origin Year 2000 w/o query yr: ", year2000);
+            VerboseLog("Origin Year 2023 w/o query yr: ", year2023);
         }
 
 
@@ -88,50 +178,71 @@ namespace SatorImaging.Tests.HUlid
         public void SetCreationTimeTest()
         {
             var localNow = DateTime.Now;
-            var utcNow = localNow.ToUniversalTime();
+            var utcFromLocal = localNow.ToUniversalTime();
+            var unixEpoch = DateTime.UnixEpoch;
 
             Assert.That(localNow.Kind == DateTimeKind.Local);
-            Assert.That(utcNow.Kind == DateTimeKind.Utc);
+            Assert.That(utcFromLocal.Kind == DateTimeKind.Utc);
+            Assert.That(unixEpoch.Kind == DateTimeKind.Utc);
 
 
+            //conversion
             HalfUlid.SetCreationTime(localNow);
             var localVal = HalfUlid.Next();
 
-            HalfUlid.SetCreationTime(utcNow);
+            HalfUlid.SetCreationTime(utcFromLocal);
             var utcVal = HalfUlid.Next();
 
-            Thread.Sleep(100);
+            Assert.That(localVal.ToHUlidDateTime() == utcVal.ToHUlidDateTime());        // utc conversion must match
+
+
+            //future
+            var future = DateTime.UtcNow.AddYears(100).AddMonths(100).AddDays(100).AddHours(100).AddMinutes(100).AddMilliseconds(1234);
+            HalfUlid.SetCreationTime(future);
+            var futureVal = HalfUlid.Next();
+
+            //minValue
             HalfUlid.SetCreationTime(DateTime.MinValue);
             var minDateTimeVal = HalfUlid.Next();
 
-            Assert.That(localVal.ToHUlidDateTime() == utcVal.ToHUlidDateTime());
-            Assert.That(minDateTimeVal.ToHUlidDateTime() != utcVal.ToHUlidDateTime());
+            Assert.That(futureVal.ToHUlidDateTime() != minDateTimeVal.ToHUlidDateTime());  //minValue use current time
 
 
-            VerboseLog("Local Time: ", localVal);
-            VerboseLog("UTC Time: ", utcVal);
-            VerboseLog("MinValue: ", minDateTimeVal);
+            //exception
+            Assert.Throws<Exception>(() => HalfUlid.SetCreationTime(unixEpoch));
+            var epochVal = HalfUlid.Next();
+
+            // creation time cannot be set before origin year.
+            Assert.That(epochVal.ToHUlidDateTime() == minDateTimeVal.ToHUlidDateTime());
+
+
+            VerboseLog("Local Time:  ", localVal);
+            VerboseLog("To UTC Time: ", utcVal);
+            VerboseLog("Future:      ", futureVal);
+
+            Debug.Log("\n# Cannot set to Unix Epoch time (exception thrown). creation time must be same.");
+            VerboseLog("MinValue:   ", minDateTimeVal);
+            VerboseLog("Unix Epoch: ", epochVal);
         }
 
 
         [Test]
         public void ConverterTest()
         {
-            var val = HalfUlid.Next();
+            var val = NextAndLog("# Test value\n");
 
             Debug.Log("Value Extension: \t" + val.ToHUlidValue());
-            Debug.Log(" Date Extension: \t" + val.ToHUlidDateTime());
+            Debug.Log("Date Extension: \t" + val.ToHUlidDateTime().ToString(FMT_TIME));
 
             Debug.Log("Value Method: \t" + HalfUlid.GetValue(val));
-            Debug.Log(" Date Method: \t" + HalfUlid.GetDateTime(val));
+            Debug.Log("Date Method: \t" + HalfUlid.GetDateTime(val).ToString(FMT_TIME));
 
-            Debug.Log("GetTimeBits value: \t" + HalfUlid.GetTimeBits(DateTime.MinValue).ToHUlidValue());
-            Debug.Log(" GetTimeBits date: \t" + HalfUlid.GetTimeBits(DateTime.MinValue).ToHUlidDateTime());
+            Debug.Log("\n# GetTimeBits(DateTime.MinValue)\nValue: \t" + HalfUlid.GetTimeBits(DateTime.MinValue).ToHUlidValue());
+            Debug.Log("Date: \t" + HalfUlid.GetTimeBits(DateTime.MinValue).ToHUlidDateTime().ToString(FMT_TIME));
 
 
             // what happens??
-            Debug.Log("");
-            Debug.Log("Non-HUlid values can be converted?");
+            Debug.Log("\n# Non-HUlid values can be converted?  DateTime.MinValue will be returned when error.");
 
             VerboseLog("-100: ", (-100L));
             VerboseLog(" -10: ", (-10L));
@@ -142,20 +253,51 @@ namespace SatorImaging.Tests.HUlid
 
 
         [Test]
-        public void AutoRestartSequenceTest()
+        public void RestartSequenceTest()
         {
-            HalfUlid.Init(2097149);
-            var val1 = HalfUlid.Next();
-            var val2 = HalfUlid.Next();
-            Thread.Sleep(100);
-            var val3 = HalfUlid.Next();
+            Debug.Log("# Init(HalfUlid.ID_MAX - 2)");
+            HalfUlid.Init(HalfUlid.ID_MAX - 2);
+            var val1 = NextAndLog("");
+            var val2 = NextAndLog("");
+            //except restart
+            Thread.Sleep(100);  // need to wait
+            var val3 = NextAndLog("");
+            NextAndLog("");
+            NextAndLog("");
 
             Assert.That(val1.ToHUlidDateTime() == val2.ToHUlidDateTime());
             Assert.That(val1.ToHUlidDateTime() != val3.ToHUlidDateTime());
 
-            VerboseLog(" Seq 1: ", val1);
-            VerboseLog(" Seq 1: ", val2);
-            VerboseLog(" Seq 2: ", val3);
+
+
+            // offset 100
+            Debug.Log("\n# Init(HalfUlid.ID_MAX - 234)");
+            HalfUlid.Init(HalfUlid.ID_MAX - 234);
+            val1 = NextAndLog("", 111);
+            val2 = NextAndLog("", 111);
+            //except restart
+            Thread.Sleep(100);  // need to wait
+            val3 = NextAndLog("", 111);
+            NextAndLog("", 111);
+            NextAndLog("", 111);
+
+            Assert.That(val1.ToHUlidDateTime() == val2.ToHUlidDateTime());
+            Assert.That(val1.ToHUlidDateTime() != val3.ToHUlidDateTime());
+
+
+            // random
+            Debug.Log("\n# Init(HalfUlid.RANDOM_ID_MAX - 2)");
+            HalfUlid.Init(HalfUlid.RANDOM_ID_MAX - 2);
+            val1 = RandomAndLog("");
+            val2 = RandomAndLog("");
+            //except restart
+            Thread.Sleep(100);  // need to wait
+            val3 = RandomAndLog("");
+            RandomAndLog("");
+            RandomAndLog("");
+
+            Assert.That(val1.ToHUlidDateTime() == val2.ToHUlidDateTime());
+            Assert.That(val1.ToHUlidDateTime() != val3.ToHUlidDateTime());
         }
 
 
