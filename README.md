@@ -6,7 +6,7 @@ Max 2,097,152 of IDs can be created for every milliseconds.
 
 - Unity Package Manager Installation URLs
     - Latest: https://github.com/sator-imaging/Half-Ulid.git
-    - v1.2.0: https://github.com/sator-imaging/Half-Ulid.git#v1.2.0
+    - v1.2.1: https://github.com/sator-imaging/Half-Ulid.git#v1.2.1
 
 
 

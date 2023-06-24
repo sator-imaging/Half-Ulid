@@ -37,9 +37,7 @@ namespace SatorImaging.HUlid
             {
                 var yearOffset = DateTime.UtcNow.Year - originYear;
                 _currentOriginYear = yearOffset < 0 || yearOffset > YEAR_MAX
-                    ? DEFAULT_YEAR_ORIGIN
-                    : originYear
-                    ;
+                    ? DEFAULT_YEAR_ORIGIN : originYear;
             }
 
             SetCreationTime(DateTime.MinValue);
@@ -116,7 +114,7 @@ namespace SatorImaging.HUlid
         ///<returns>DateTime.MinValue when error.</returns>
         public static DateTime GetDateTime(long val, int originYear = YEAR_USE_CURRENT)
         {
-            if (originYear < 0)
+            if (originYear <= YEAR_USE_CURRENT)
                 originYear = _currentOriginYear;
 
             try
