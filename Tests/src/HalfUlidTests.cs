@@ -80,8 +80,11 @@ namespace SatorImaging.Tests.HUlid
 
             //random
             val = RandomAndLog("");
+            Assert.That((val & HalfUlid.RANDOM_ID_BITMASK) == 104);
             val = RandomAndLog("");
+            Assert.That((val & HalfUlid.RANDOM_ID_BITMASK) == 105);
             val = RandomAndLog("");
+            Assert.That((val & HalfUlid.RANDOM_ID_BITMASK) == 106);
 
 
             //next() again
@@ -99,36 +102,50 @@ namespace SatorImaging.Tests.HUlid
         [Test]
         public void InitializeTest()
         {
+            long val;
+
             //originYear
             Debug.Log("# Init() with originYear option");
 
-            HalfUlid.Init(originYear: -1);
-            NextAndLog($"Init(originYear: {-1})");
-
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year - 999);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 999})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 999})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year - 128);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 128})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 128})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year - 127);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 127})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 127})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year - 127);
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year - 126);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 126})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 126})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year - 126);
+
+
+            var lastOriginYear = HalfUlid.CurrentOriginYear;
+            HalfUlid.Init(originYear: HalfUlid.YEAR_USE_CURRENT);
+            val = NextAndLog($"Init(originYear: {HalfUlid.YEAR_USE_CURRENT})");
+            Assert.That(HalfUlid.CurrentOriginYear == lastOriginYear);
+
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year - 1);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 1})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 1})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year - 1);
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year + 1);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 1})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 1})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year + 310);
-            NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 310})");
+            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 310})");
+            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
 
 
             //use current
@@ -147,6 +164,11 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(originYear: 2000);
             HalfUlid.Init(originYear: 310);
             Debug.Log($"Init(originYear: 2000) -> Init(yr:310):   \t Origin Year: " + HalfUlid.CurrentOriginYear);
+            Assert.That(HalfUlid.CurrentOriginYear == HalfUlid.DEFAULT_YEAR_ORIGIN);
+
+            HalfUlid.Init(originYear: 2000);
+            HalfUlid.Init(originYear: 9999);
+            Debug.Log($"Init(originYear: 2000) -> Init(yr:9999):   \t Origin Year: " + HalfUlid.CurrentOriginYear);
             Assert.That(HalfUlid.CurrentOriginYear == HalfUlid.DEFAULT_YEAR_ORIGIN);
 
 
@@ -245,10 +267,19 @@ namespace SatorImaging.Tests.HUlid
             Debug.Log("\n# Non-HUlid values can be converted?  DateTime.MinValue will be returned when error.");
 
             VerboseLog("-100: ", (-100L));
+            Assert.That((-100L).ToHUlidDateTime() == DateTime.MinValue);
+
             VerboseLog(" -10: ", (-10L));
+            Assert.That((-10L).ToHUlidDateTime() == DateTime.MinValue);
+
             VerboseLog("   0: ", (0L));
+            Assert.That((0L).ToHUlidDateTime() == DateTime.MinValue);
+
             VerboseLog("  10: ", (10L));
+            Assert.That((10L).ToHUlidDateTime() == DateTime.MinValue);
+
             VerboseLog(" 100: ", (100L));
+            Assert.That((100L).ToHUlidDateTime() == DateTime.MinValue);
         }
 
 
@@ -290,6 +321,36 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(HalfUlid.RANDOM_ID_MAX - 2);
             val1 = RandomAndLog("");
             val2 = RandomAndLog("");
+            //except restart
+            Thread.Sleep(100);  // need to wait
+            val3 = RandomAndLog("");
+            RandomAndLog("");
+            RandomAndLog("");
+
+            Assert.That(val1.ToHUlidDateTime() == val2.ToHUlidDateTime());
+            Assert.That(val1.ToHUlidDateTime() != val3.ToHUlidDateTime());
+
+
+            // next after random
+            Debug.Log("\n# Init(HalfUlid.RANDOM_ID_MAX - 2)");
+            HalfUlid.Init(HalfUlid.RANDOM_ID_MAX - 2);
+            val1 = RandomAndLog("");
+            val2 = RandomAndLog("");
+            //except restart
+            Thread.Sleep(100);  // need to wait
+            val3 = NextAndLog("");
+            NextAndLog("");
+            NextAndLog("");
+
+            Assert.That(val1.ToHUlidDateTime() == val2.ToHUlidDateTime());
+            Assert.That(val1.ToHUlidDateTime() != val3.ToHUlidDateTime());
+
+
+            // random after next
+            Debug.Log("\n# Init(HalfUlid.RANDOM_ID_MAX + 310)");
+            HalfUlid.Init(HalfUlid.RANDOM_ID_MAX + 310);
+            val1 = NextAndLog("");
+            val2 = NextAndLog("");
             //except restart
             Thread.Sleep(100);  // need to wait
             val3 = RandomAndLog("");
