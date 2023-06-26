@@ -16,6 +16,7 @@ namespace SatorImaging.HUlid
         static int _currentOriginYear = DEFAULT_YEAR_ORIGIN;
         static long _currentValue = DEFAULT_START_VALUE;
         static long _timeBits = GetTimeBits(DateTime.MinValue);  //long.MinValue;
+        static bool _isRandomized = false;
 
         public const int RANDOM_ID_MAX = 8191;  // 13-bit
         public const long RANDOM_ID_BITMASK = 0b_0001_1111_1111_1111L;
@@ -31,6 +32,7 @@ namespace SatorImaging.HUlid
         public static void Init() => Init(DEFAULT_START_VALUE, YEAR_USE_CURRENT);
         public static void Init(int startValue = DEFAULT_START_VALUE, int originYear = YEAR_USE_CURRENT)
         {
+            _isRandomized = false;
             _currentValue = Math.Max(DEFAULT_START_VALUE, startValue);
 
             if (originYear > YEAR_USE_CURRENT)
@@ -79,7 +81,7 @@ namespace SatorImaging.HUlid
         public static long Next(int offset = 1)
         {
             _currentValue += Math.Max(1, offset);
-            if (_currentValue > ID_MAX)
+            if (_currentValue > ID_MAX || (_isRandomized && _currentValue > RANDOM_ID_MAX))
                 Init(startValue: 0);
 
             return _timeBits | _currentValue;
@@ -89,6 +91,7 @@ namespace SatorImaging.HUlid
         ///<remarks>Init() is automatically called when maximum id for current creation time is reached.</remarks>
         public static long Random()
         {
+            _isRandomized = true;
             if (_currentValue >= RANDOM_ID_MAX)
                 Init();
 
@@ -124,8 +127,7 @@ namespace SatorImaging.HUlid
                 var year = val >> 57;
                 if (year < 0)
                 {
-                    year &= 0b_0011_1111L;
-                    year |= 0b_0100_0000L;
+                    year &= 0b_0111_1111L;
                 }
                 year += originYear;
 
