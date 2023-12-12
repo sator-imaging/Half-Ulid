@@ -40,8 +40,8 @@ jobs:
         cd .docfx
         if ! test -f 'toc.yml'; then
           echo '- name: API Reference' >> 'toc.yml'
-          echo '  href: api/' >> 'toc.yml'
-          if test -f 'LICENSE.md'; then
+          echo '  href: api/toc.yml' >> 'toc.yml'
+          if test -f '../LICENSE.md'; then
             echo '- name: License' >> 'toc.yml'
             echo '  href: LICENSE.md' >> 'toc.yml'
           fi
@@ -51,7 +51,7 @@ jobs:
     - run: dotnet tool update -g docfx
     - run: docfx .docfx/docfx.json
 
-    - name: Copy README as index.html
+    - name: Make index.html work
       run: |
         pushd '.docfx/_site'
         if ! test -f 'index.html'; then
@@ -59,6 +59,9 @@ jobs:
             cp 'README.html' 'index.html'
           fi       
         fi
+        if test -f 'index.json'; then
+          mv 'index.json' 'index_data.json'
+        fi       
         popd
 
     - name: Setup Pages
