@@ -36,7 +36,7 @@
             "_appTitle": "Half ULID",
             "_appName": "Half ULID",
             "_appFooter": "<span><a href=\"\">GitHub</a> | <a href=\"\">Contact</a> | Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></span>",
-            "pdf": false,
+            "pdf": true,
             "_enableSearch": true,
             "_enableNewTab": false,
             "_disableContribution": false,
@@ -138,6 +138,5 @@
         "keepFileLink": false,
         "cleanupCacheHistory": false,
         "disableGitFeatures": false
-    },
-    "pdf": {}
+    }
 }
