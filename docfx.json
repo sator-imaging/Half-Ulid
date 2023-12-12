@@ -3,13 +3,10 @@
         {
             "src": [
                 {
+                    "src": "./Runtime",
                     "files": [
-                        "../**.csproj",
-                        "../**.cs"
-                    ],
-                    "exclude": [
-                        "../docs/**",
-                        "../**.meta"
+                        "**.csproj",
+                        "**.cs"
                     ]
                 }
             ],
@@ -31,8 +28,7 @@
                     "articles/**.md",
                     "articles/**/toc.yml",
                     "toc.yml",
-                    "*.md",
-                    "../**.md"
+                    "*.md"
                 ]
             }
         ],
