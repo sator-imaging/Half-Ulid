@@ -65,7 +65,7 @@
         },
         "content": [
             {
-                "src": "../",
+                "src": "..",
                 "files": [
                     ".docfx/api/**.yml",
                     ".docfx/api/index.md",
