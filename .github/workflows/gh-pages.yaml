@@ -41,8 +41,10 @@ jobs:
         if ! test -f 'toc.yml'; then
           echo '- name: API Reference' >> 'toc.yml'
           echo '  href: api/toc.yml' >> 'toc.yml'
+          if test -f '../LICENSE.md'; then
             echo '- name: License' >> 'toc.yml'
-            echo '  href: LICENSE.md' >> 'toc.yml'
+            echo '  href: LICENSE.html' >> 'toc.yml'
+          fi
         fi
         cd ..
 
