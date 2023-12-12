@@ -65,18 +65,18 @@
         },
         "content": [
             {
+                "src": "../",
                 "files": [
-                    "api/**.yml",
-                    "api/index.md",
-                    "articles/**.md",
-                    "articles/**/toc.yml",
-                    "toc.yml",
+                    ".docfx/api/**.yml",
+                    ".docfx/api/index.md",
+                    ".docfx/articles/**.md",
+                    ".docfx/articles/**/toc.yml",
+                    ".docfx/toc.yml",
                     "*.md"
                 ],
                 "exclude": [
                     "_site/**",
-                    "obj/**",
-                    "**/.*"
+                    "obj/**"
                 ]
             }
         ],
