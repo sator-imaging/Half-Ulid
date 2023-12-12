@@ -35,7 +35,7 @@
         "globalMetadata": {
             "_appTitle": "Half ULID",
             "_appName": "Half ULID",
-            "_appFooter": "<span>&copy; 2023 Sator Imaging &mdash; Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></span>",
+            "_appFooter": "&copy; 2023 Sator Imaging <small>&nbsp; Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></small>",
             "pdf": false,
             "_enableSearch": true,
             "_enableNewTab": false,

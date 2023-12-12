@@ -17,7 +17,7 @@ export default {
       title: 'YouTube'
     },
     {
-      icon: 'chat-left-text-fill',
+      icon: 'chat-quote-fill',
       href: 'https://www.sator-imaging.com/',
       title: 'Contact'
     },
