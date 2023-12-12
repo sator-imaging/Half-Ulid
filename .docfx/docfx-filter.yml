@@ -3,8 +3,6 @@ apiRules:
     uidRegex: ^Global
     type: Namespace
 - exclude:
-    type: Field
-- exclude:
     uidRegex: ^System\.Object
     type: Type
 - exclude:

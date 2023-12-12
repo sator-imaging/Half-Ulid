@@ -71,7 +71,18 @@
                     "articles/**.md",
                     "articles/**/toc.yml",
                     "toc.yml",
-                    "../*.md"
+                    "*.md"
+                ],
+                "exclude": [
+                    "_site/**",
+                    "obj/**",
+                    "**/.*"
+                ]
+            },
+            {
+                "src": "../",
+                "files": [
+                    "../**.md"
                 ],
                 "exclude": [
                     "_site/**",
