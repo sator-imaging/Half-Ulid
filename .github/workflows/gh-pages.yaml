@@ -36,13 +36,16 @@ jobs:
         dotnet-version: 8.x
 
     - name: Generate toc.yml
+      # first entry used as leader of bookcrumb menu so 'Home' is required
       run: |
         cd .docfx
         if ! test -f 'toc.yml'; then
+          echo '- name: Home' >> 'toc.yml'
+          echo '  href: index.html' >> 'toc.yml'
           echo '- name: API Reference' >> 'toc.yml'
           echo '  href: api/toc.yml' >> 'toc.yml'
           if test -f '../LICENSE.md'; then
-            echo '- name: License' >> 'toc.yml'
+            echo '- name: License Notice' >> 'toc.yml'
             echo '  href: LICENSE.html' >> 'toc.yml'
           fi
         fi
