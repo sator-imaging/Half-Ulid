@@ -36,7 +36,6 @@
             "_appTitle": "Half ULID",
             "_appName": "Half ULID",
             "_appFooter": "<span><a href=\"\">GitHub</a> | <a href=\"\">Contact</a> | Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></span>",
-            "_gitContribute": "https://github.com/sator-imaging/Half-Ulid",
             "pdf": true,
             "_enableSearch": true,
             "_enableNewTab": false,
@@ -48,7 +47,8 @@
         },
         "template": [
             "default",
-            "modern"
+            "modern",
+            "template"
         ],
         "dest": "_site",
         "sitemap": {
@@ -66,12 +66,8 @@
         "content": [
             {
                 "files": [
-                    "api/**.yml",
-                    "api/index.md",
-                    "articles/**.md",
-                    "articles/**/toc.yml",
-                    "toc.yml",
-                    "*.md"
+                    "**.yml",
+                    "**.md"
                 ],
                 "exclude": [
                     "_site/**",
