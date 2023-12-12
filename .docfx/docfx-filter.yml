@@ -1,28 +1,25 @@
 apiRules:
 - include:
-    uidRegex: ^Global
-    type: Namespace
+  uidRegex: ^Global
+  type: Namespace
 - exclude:
-    uidRegex: ^.*
-    type: Field
+  uidRegex: ^System\.Object
+  type: Type
 - exclude:
-    uidRegex: ^System\.Object
-    type: Type
+  uidRegex: ^UnityEngine\.Object
+  type: Type
 - exclude:
-    uidRegex: ^UnityEngine\.Object
-    type: Type
+  uidRegex: ^UnityEngine\.Component
+  type: Type
 - exclude:
-    uidRegex: ^UnityEngine\.Component
-    type: Type
+  uidRegex: ^UnityEngine\.Behaviour
+  type: Type
 - exclude:
-    uidRegex: ^UnityEngine\.Behaviour
-    type: Type
+  uidRegex: ^UnityEngine\.MonoBehaviour
+  type: Type
 - exclude:
-    uidRegex: ^UnityEngine\.MonoBehaviour
-    type: Type
+  uidRegex: ^UnityEngine\.ScriptableObject
+  type: Type
 - exclude:
-    uidRegex: ^UnityEngine\.ScriptableObject
-    type: Type
-- exclude:
-    uidRegex: ^UnityEditor
-    type: Type
+  uidRegex: ^UnityEditor
+  type: Type
