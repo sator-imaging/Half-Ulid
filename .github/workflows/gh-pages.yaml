@@ -35,6 +35,18 @@ jobs:
       with:
         dotnet-version: 8.x
 
+    - name: Generate toc.yml
+      run: |
+        cd .docfx
+        if ![test -f 'toc.yml']; then
+          echo '- name: API Reference' >> 'toc.yml'
+          echo '  href: api/' >> 'toc.yml'
+          if [test -f 'LICENSE.md']; then
+            echo '- name: License' >> 'toc.yml'
+            echo '  href: LICENSE.md' >> 'toc.yml'
+          fi
+        fi
+        cd ..
     - run: dotnet tool update -g docfx
     - run: docfx .docfx/docfx.json
 
@@ -45,6 +57,17 @@ jobs:
       with:
         # Upload entire repository
         path: '.docfx/_site'
+
+    - name: Copy README as index.html
+      run: |
+        cd .docfx
+        if ![test -f 'index.html']; then
+          if test -f 'README.html'; then
+            cp 'README.html' 'index.html'
+          fi       
+        fi
+        cd ..
+
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v2
