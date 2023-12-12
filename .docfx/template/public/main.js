@@ -16,5 +16,10 @@ export default {
       href: 'https://www.youtube.com/@SatorImaging',
       title: 'YouTube'
     },
+    {
+      icon: 'chat-left-text-fill',
+      href: 'https://www.sator-imaging.com/',
+      title: 'Contact'
+    },
   ]
 }
