@@ -1,34 +1,82 @@
 {
     "metadata": [
         {
+            "filter": "docfx-filter.yml",
+            "includePrivateMembers": false,
+            "EnumSortOrder": "declaringOrder",
+            "includeExplicitInterfaceImplementations": true,
             "src": [
                 {
-                    "src": "./Runtime",
+                    "src": "../",
                     "files": [
-                        "**.csproj",
-                        "**.cs"
+                        "**/*.csproj",
+                        "**/*.dll",
+                        "**/*.cs"
+                    ],
+                    "exclude": [
+                        "**/.*",
+                        "**/bin/**",
+                        "**/obj/**"
                     ]
                 }
             ],
+            "outputFormat": "apiPage",
             "dest": "api",
             "disableGitFeatures": false,
-            "disableDefaultFilter": false
+            "disableDefaultFilter": false,
+            "shouldSkipMarkup": false,
+            "properties": {
+                "DefineConstants": "SYMBOL_FOR_IF_DIRECTIVES;",
+                "TargetFramework": "netstandard2.0"
+            }
         }
     ],
     "build": {
+        "globalMetadata": {
+            "_appTitle": "Half ULID",
+            "_appName": "Half ULID",
+            "_appFooter": "<span><a href=\"\">GitHub</a> | <a href=\"\">Contact</a> | Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></span>",
+            "pdf": true,
+            "_enableSearch": true,
+            "_enableNewTab": false,
+            "_disableContribution": false,
+            "_disableNavbar": false,
+            "_disableBreadcrumb": false,
+            "_disableToc": false,
+            "_disableAffix": false
+        },
+        "template": [
+            "default",
+            "modern",
+            "template"
+        ],
+        "dest": "_site",
+        "sitemap": {
+            "baseUrl": "If the value is not specified, sitemap.xml will NOT be generated.",
+            "priority": 0.1,
+            "changefreq": "monthly",
+            "fileOptions": {
+                "**.yml": {
+                    "priority": 0.5,
+                    "changefreq": "daily",
+                    "lastmod": "2023-12-12"
+                }
+            }
+        },
         "content": [
             {
                 "files": [
                     "api/**.yml",
-                    "api/index.md"
-                ]
-            },
-            {
-                "files": [
+                    "api/index.md",
                     "articles/**.md",
                     "articles/**/toc.yml",
                     "toc.yml",
                     "*.md"
+                ],
+                "exclude": [
+                    "_site/**",
+                    "obj/**",
+                    "**/.*"
                 ]
             }
         ],
@@ -36,6 +84,11 @@
             {
                 "files": [
                     "images/**"
+                ],
+                "exclude": [
+                    "_site/**",
+                    "obj/**",
+                    "**/.*"
                 ]
             }
         ],
@@ -45,22 +98,46 @@
                     "apidoc/**.md"
                 ],
                 "exclude": [
+                    "_site/**",
                     "obj/**",
-                    "_site/**"
+                    "**/.*"
                 ]
             }
         ],
-        "dest": "_site",
         "globalMetadataFiles": [],
         "fileMetadataFiles": [],
-        "template": [
-            "default"
+        "fileMetadata": {
+            "priority": {
+                "**.md": 2.5,
+                "spec/**.md": 3
+            },
+            "keywords": {
+                "Runtime/**/*": [
+                    "API",
+                    "Runtime"
+                ],
+                "Editor/**/*": [
+                    "API",
+                    "Editor"
+                ]
+            },
+            "_noindex": {
+                "articles/**/article.md": true
+            }
+        },
+        "postProcessors": [
+            "ExtractSearchIndex"
         ],
-        "postProcessors": [],
         "markdownEngineName": "markdig",
+        "markdownEngineProperties": {
+            "alerts": {
+                "TODO": "alert alert-secondary"
+            }
+        },
         "noLangKeyword": false,
         "keepFileLink": false,
         "cleanupCacheHistory": false,
         "disableGitFeatures": false
-    }
+    },
+    "pdf": {}
 }
