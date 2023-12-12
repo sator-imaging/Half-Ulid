@@ -20,6 +20,7 @@
                     ]
                 }
             ],
+            "outputFormat": "apiPage",
             "dest": "api",
             "disableGitFeatures": false,
             "disableDefaultFilter": false,
@@ -46,8 +47,8 @@
         },
         "template": [
             "default",
-            "modern",
-            "template"
+            "template",
+            "modern"
         ],
         "dest": "_site",
         "sitemap": {
