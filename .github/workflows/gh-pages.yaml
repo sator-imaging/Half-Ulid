@@ -79,6 +79,9 @@ jobs:
           if test -f 'api/toc.html'; then
             cp -f 'api/toc.html' 'toc.html'
           fi
+          if test -f 'api/toc.json'; then
+            cp -f 'api/toc.json' 'toc.json'
+          fi
         popd
 
     - name: Setup Pages
