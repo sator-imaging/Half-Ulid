@@ -36,13 +36,12 @@ jobs:
         dotnet-version: 8.x
 
     - name: Generate toc.yml
-      # first entry used as leader of bookcrumb menu so 'Home' is required
       run: |
         cd .docfx
         if ! test -f 'toc.yml'; then
           echo 'items:' >> 'toc.yml'
           echo '- name: API' >> 'toc.yml'
-          echo '  href: api/toc.yml' >> 'toc.yml'
+          echo '  href: api/' >> 'toc.yml'
           echo '  expanded: true' >> 'toc.yml'
           if test -f '../LICENSE.md'; then
             echo '- name: License' >> 'toc.yml'
@@ -62,13 +61,23 @@ jobs:
     - name: Make index.html work
       run: |
         pushd '.docfx/_site'
-        if ! test -f 'index.html'; then
-          if test -f 'README.html'; then
+        if test -f 'README.html'; then
+          if ! test -f 'index.html'; then
             cp 'README.html' 'index.html'
+          fi
+          if ! test -f 'README.md'; then
             cp 'README.html' 'README.md'
           fi
         fi
         popd
+
+    # global config file toc.yml seems designed to define nav bar links.
+    # api/toc.html is better than global toc.html to be shown on left side of page.
+    - name: Copy api/toc.html
+      run: |
+        if test -f 'api/toc.html'; then
+          cp -f 'api/toc.html' 'toc.html'
+        fi
 
     - name: Setup Pages
       uses: actions/configure-pages@v3
