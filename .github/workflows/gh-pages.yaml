@@ -42,9 +42,9 @@ jobs:
         if ! test -f 'toc.yml'; then
           echo 'items:' >> 'toc.yml'
           echo '- name: Home' >> 'toc.yml'
-          echo '  href: index.html' >> 'toc.yml'
+          echo '  href: README.html' >> 'toc.yml'
           echo '- name: API' >> 'toc.yml'
-          echo '  href: api/toc.yml' >> 'toc.yml'
+          echo '  href: api/' >> 'toc.yml'
           echo '  expanded: true' >> 'toc.yml'
           if test -f '../LICENSE.md'; then
             echo '- name: License' >> 'toc.yml'
@@ -58,13 +58,14 @@ jobs:
 
     # there is index.json and it is required by full text search.
     # unfortunately, GitHub Pages serve index.json over index.html.
+    # copy README.html as README
     - name: Make index.html work
       run: |
         pushd '.docfx/_site'
         if ! test -f 'index.html'; then
           if test -f 'README.html'; then
-            cp 'README.html' 'index'
-          fi       
+            cp 'README.html' 'README'
+          fi
         fi
         popd
 
