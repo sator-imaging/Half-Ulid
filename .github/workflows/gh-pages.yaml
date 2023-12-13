@@ -35,13 +35,14 @@ jobs:
       with:
         dotnet-version: 8.x
 
+    # api/toc.yml makes breadcrumb menu weird. waiting for future update.
     - name: Generate toc.yml
       run: |
         cd .docfx
         if ! test -f 'toc.yml'; then
           echo 'items:' >> 'toc.yml'
           echo '- name: API' >> 'toc.yml'
-          echo '  href: api/' >> 'toc.yml'
+          echo '  href: api/toc.yml' >> 'toc.yml'
           echo '  expanded: true' >> 'toc.yml'
           if test -f '../LICENSE.md'; then
             echo '- name: License' >> 'toc.yml'
@@ -69,19 +70,6 @@ jobs:
             cp 'README.html' 'README.md'
           fi
         fi
-        popd
-
-    # global config file toc.yml seems designed to define nav bar links.
-    # api/toc.html is better than global toc.html to be shown on left side of page.
-    - name: Copy api/toc.html
-      run: |
-        pushd '.docfx/_site'
-          if test -f 'api/toc.html'; then
-            cp -f 'api/toc.html' 'toc.html'
-          fi
-          if test -f 'api/toc.json'; then
-            cp -f 'api/toc.json' 'toc.json'
-          fi
         popd
 
     - name: Setup Pages
