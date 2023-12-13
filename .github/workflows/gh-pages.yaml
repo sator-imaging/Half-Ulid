@@ -41,8 +41,6 @@ jobs:
         cd .docfx
         if ! test -f 'toc.yml'; then
           echo 'items:' >> 'toc.yml'
-          echo '- name: Home' >> 'toc.yml'
-          echo '  href: README.html' >> 'toc.yml'
           echo '- name: API' >> 'toc.yml'
           echo '  href: api/' >> 'toc.yml'
           echo '  expanded: true' >> 'toc.yml'
@@ -56,15 +54,18 @@ jobs:
     - run: dotnet tool update -g docfx
     - run: docfx .docfx/docfx.json
 
-    # there is index.json and it is required by full text search.
-    # unfortunately, GitHub Pages serve index.json over index.html.
-    # copy README.html as README
+    # docfx generates index.json for full text search and file name is hard coded.
+    # unfortunately, GitHub Pages serves index.json over index.html. README.md is
+    # priority than index.json so copy it to be able to access by directory url.
+    # note that index.html is still required due to nav bar link is hard coded.
+    # this behaviour could only happen on beta version of Deploy by GitHub Actions.
     - name: Make index.html work
       run: |
         pushd '.docfx/_site'
         if ! test -f 'index.html'; then
           if test -f 'README.html'; then
-            cp 'README.html' 'README'
+            cp 'README.html' 'index.html'
+            cp 'README.html' 'README.md'
           fi
         fi
         popd
