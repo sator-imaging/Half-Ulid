@@ -56,14 +56,13 @@ jobs:
     - run: dotnet tool update -g docfx
     - run: docfx .docfx/docfx.json
 
+    # there is index.json and it is required by full text search.
+    # unfortunately, GitHub Pages serve index.json over index.html.
     - name: Make index.html work
       run: |
         pushd '.docfx/_site'
         if ! test -f 'index.html'; then
           if test -f 'README.html'; then
-            cp 'README.html' 'index.html'
-            cp 'README.html' 'README.md'
-            cp 'README.html' 'README'
             cp 'README.html' 'index'
           fi       
         fi
