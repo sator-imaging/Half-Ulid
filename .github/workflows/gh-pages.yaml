@@ -40,12 +40,14 @@ jobs:
       run: |
         cd .docfx
         if ! test -f 'toc.yml'; then
+          echo 'items:' >> 'toc.yml'
           echo '- name: Home' >> 'toc.yml'
           echo '  href: index.html' >> 'toc.yml'
-          echo '- name: API Reference' >> 'toc.yml'
+          echo '- name: API' >> 'toc.yml'
           echo '  href: api/toc.yml' >> 'toc.yml'
+          echo '  expanded: true' >> 'toc.yml'
           if test -f '../LICENSE.md'; then
-            echo '- name: License Notice' >> 'toc.yml'
+            echo '- name: License' >> 'toc.yml'
             echo '  href: LICENSE.html' >> 'toc.yml'
           fi
         fi
@@ -60,11 +62,11 @@ jobs:
         if ! test -f 'index.html'; then
           if test -f 'README.html'; then
             cp 'README.html' 'index.html'
+            cp 'README.html' 'README.md'
+            cp 'README.html' 'README'
+            cp 'README.html' 'index'
           fi       
         fi
-        if test -f 'index.json'; then
-          mv 'index.json' 'index_data.json'
-        fi       
         popd
 
     - name: Setup Pages
