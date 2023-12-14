@@ -3,7 +3,7 @@ body {
     --bs-link-hover-color-rgb: 64, 180, 128 !important;
 }
 
-nav.navbar a.nab-link {
+nav.navbar a.nav-link {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -16,6 +16,6 @@ nav.navbar a.navbar-brand img {
     margin-right: 0.5em;
 }
 
-nav.affix a.link-body-emphasis {
+div.affix a.link-body-emphasis {
     font-weight: bold;
 }
