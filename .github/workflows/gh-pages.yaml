@@ -39,38 +39,29 @@ jobs:
     - name: Generate toc.yml
       run: |
         cd .docfx
-        if ! test -f 'toc.yml'; then
-          echo 'items:' >> 'toc.yml'
-          echo '- name: API' >> 'toc.yml'
-          echo '  href: api/toc.yml' >> 'toc.yml'
-          echo '  expanded: true' >> 'toc.yml'
-          if test -f '../LICENSE.md'; then
-            echo '- name: License' >> 'toc.yml'
-            echo '  href: LICENSE.html' >> 'toc.yml'
+          if ! test -f 'toc.yml'; then
+            echo '- name: API' >> 'toc.yml'
+            echo '  href: api/toc.yml' >> 'toc.yml'
+            echo '  expanded: true' >> 'toc.yml'
+            if test -f '../LICENSE.md'; then
+              echo '- name: License' >> 'toc.yml'
+              echo '  href: LICENSE.html' >> 'toc.yml'
+            fi
           fi
-        fi
         cd ..
+
+    - name: Copy README.md as index.md
+      run: |
+        pushd '.docfx'
+          if test -f 'README.md'; then
+            if ! test -f 'index.md'; then
+              cp 'README.md' 'index.md'
+            fi
+          fi
+        popd
 
     - run: dotnet tool update -g docfx
     - run: docfx .docfx/docfx.json
-
-    # docfx generates index.json for full text search and file name is hard coded.
-    # unfortunately, GitHub Pages serves index.json over index.html. README.md is
-    # priority than index.json so copy it to be able to access by directory url.
-    # note that index.html is still required due to nav bar link is hard coded.
-    # this behaviour could only happen on beta version of Deploy by GitHub Actions.
-    - name: Make index.html work
-      run: |
-        pushd '.docfx/_site'
-        if test -f 'README.html'; then
-          if ! test -f 'index.html'; then
-            cp 'README.html' 'index.html'
-          fi
-          if ! test -f 'README.md'; then
-            cp 'README.html' 'README.md'
-          fi
-        fi
-        popd
 
     - name: Setup Pages
       uses: actions/configure-pages@v3

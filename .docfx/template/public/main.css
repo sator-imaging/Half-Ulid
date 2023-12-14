@@ -1,0 +1,21 @@
+body {
+    --bs-link-color-rgb: 66, 184, 131 !important;
+    --bs-link-hover-color-rgb: 64, 180, 128 !important;
+}
+
+nav.navbar a.nab-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+nav.navbar a.navbar-brand img {
+    width: 50px;
+    height: 50px;
+    margin-left: 0.2em;
+    margin-right: 0.5em;
+}
+
+nav.affix a.link-body-emphasis {
+    font-weight: bold;
+}
