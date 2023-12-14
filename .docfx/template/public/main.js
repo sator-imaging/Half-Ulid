@@ -21,5 +21,6 @@ export default {
             href: 'https://www.sator-imaging.com/',
             title: 'Contact'
         },
-    ]
+    ],
+    showLightbox: (img) => true,
 }

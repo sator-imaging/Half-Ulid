@@ -1,6 +1,10 @@
 body {
-    --bs-link-color-rgb: 66, 184, 131 !important;
-    --bs-link-hover-color-rgb: 64, 180, 128 !important;
+    --disabled--bs-link-color-rgb: 66, 184, 131 !important;
+    --disabled--bs-link-hover-color-rgb: 64, 180, 128 !important;
+}
+
+nav.navbar i.bi {
+    --color: #22cbe1;
 }
 
 nav.navbar a.nav-link {
@@ -10,10 +14,21 @@ nav.navbar a.nav-link {
 }
 
 nav.navbar a.navbar-brand img {
-    width: 50px;
-    height: 50px;
-    margin-left: 0.2em;
-    margin-right: 0.5em;
+    height: 46px;
+    margin: 2px 0.3em 2px 0.2em;
+}
+
+nav.navbar ul.dropdown-menu {
+    padding: 2px;
+    width: max-content;
+}
+
+nav.toc li>ul {
+    display: block !important;
+}
+
+nav.toc span.expand-stub {
+    display: none !important;
 }
 
 div.affix a.link-body-emphasis {
