@@ -73,14 +73,6 @@ h2 {
     font-weight: 900;
 }
 
-h3,
-h4,
-h5,
-h6 {
+h3 {
     font-family: 'Montserrat', 'M PLUS 2', sans-serif;
-}
-
-h1.api {
-    -font-size: calc(1.3rem + 1.0vw);
-    font-weight: 200;
 }
