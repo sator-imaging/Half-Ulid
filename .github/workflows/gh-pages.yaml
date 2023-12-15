@@ -46,8 +46,8 @@ jobs:
             if test -f '../LICENSE.md'; then
               echo '- name: License' >> 'toc.yml'
               echo '  href: LICENSE.html' >> 'toc.yml'
-              if ! [ "$(echo ../LICENSE.md | sed -n '/^# /p;q')" ]; then
-                echo "# $(echo ../LICENSE.md)" > ../LICENSE.md
+              if ! [ "$(head -1 ../LICENSE.md | sed -n '/^# /p;q')" ]; then
+                echo "# $(cat ../LICENSE.md)" > ../LICENSE.md
               fi
             fi
           fi
