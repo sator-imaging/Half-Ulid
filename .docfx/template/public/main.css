@@ -18,7 +18,7 @@ nav.navbar a.navbar-brand img {
     margin: 2px 0.3em 2px 0.2em;
 }
 
-nav.navbar a.navbar-brand img[srcf$="images/unity/made-with-unity.svg"] {
+nav.navbar a.navbar-brand img[src$="images/unity/made-with-unity.svg"] {
     height: 36px;
     margin: 7px 0.5em 7px 0.3em;
 }

@@ -4,7 +4,7 @@
             "filter": "docfx-filter.yml",
             "includePrivateMembers": false,
             "EnumSortOrder": "declaringOrder",
-            "includeExplicitInterfaceImplementations": true,
+            "includeExplicitInterfaceImplementations": false,
             "src": [
                 {
                     "src": "../",
