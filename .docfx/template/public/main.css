@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@200;300;900');
-@import url('https://fonts.googleapis.com/css2?display=swap&family=Montserrat:wght@200;300;900');
 @import url('https://fonts.googleapis.com/css2?display=swap&family=M+PLUS+2:wght@200;300;900');
 @import url('https://fonts.googleapis.com/css2?display=swap&family=Poppins:wght@200;300;900');
 
@@ -71,9 +70,4 @@ h2 {
     font-family: 'Inter', 'M PLUS 2', sans-serif;
     letter-spacing: -0.025em;
     font-weight: 900;
-}
-
-h3 {
-    font-family: 'Montserrat', 'M PLUS 2', sans-serif;
-    letter-spacing: -0.025em;
 }
