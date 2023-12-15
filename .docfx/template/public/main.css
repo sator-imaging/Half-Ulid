@@ -72,6 +72,6 @@ h2 {
     font-weight: 900;
 }
 
-h3 {
+body[data-yaml-mime=ApiPage] article h3[data-uid] {
     font-weight: 200;
 }
