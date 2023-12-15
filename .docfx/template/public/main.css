@@ -18,7 +18,8 @@ nav.navbar i.bi {
 /** navbar */
 
 nav.navbar a.navbar-brand {
-    margin-left: 0.3em;
+    margin-left: 0.5rem;
+    margin-right: 0.6rem;
 }
 
 nav.navbar a.navbar-brand,
