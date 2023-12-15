@@ -25,8 +25,8 @@ nav.navbar a.nav-link {
 }
 
 nav.navbar a.navbar-brand img {
-    height: 38px;
-    margin: 6px 0.4em 6px 0.2em;
+    height: 34px;
+    margin: 8px 0.4em 8px 0.2em;
 }
 
 nav.navbar a.navbar-brand img[src$="images/unity/made-with-unity.svg"] {
