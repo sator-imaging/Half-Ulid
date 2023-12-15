@@ -134,7 +134,7 @@
                 ]
             },
             "_noindex": {
-                "articles/**/article.md": true
+                "README.md": true
             }
         },
         "postProcessors": [

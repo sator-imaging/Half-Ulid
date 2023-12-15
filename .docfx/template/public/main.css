@@ -1,10 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@200;300;900');
+@import url('https://fonts.googleapis.com/css2?display=swap&family=Montserrat:wght@200;300;900');
+@import url('https://fonts.googleapis.com/css2?display=swap&family=M+PLUS+2:wght@200;300;900');
+@import url('https://fonts.googleapis.com/css2?display=swap&family=Poppins:wght@200;300;900');
+
 body {
     --DISABLED--bs-link-color-rgb: 66, 184, 131 !important;
     --DISABLED--bs-link-hover-color-rgb: 64, 180, 128 !important;
 }
 
 nav.navbar i.bi {
-    --DISABLED--color: #22cbe1;
+    -color: #22cbe1;
 }
 
 nav.navbar a.navbar-brand,
@@ -20,8 +25,8 @@ nav.navbar a.navbar-brand img {
 }
 
 nav.navbar a.navbar-brand img[src$="images/unity/made-with-unity.svg"] {
-    height: 36px;
-    margin: 7px 0.5em 7px 0.3em;
+    height: 32px;
+    margin: 10px 0.5em 8px 0.3em;
 }
 
 nav.navbar ul.dropdown-menu {
@@ -39,4 +44,29 @@ nav.toc span.expand-stub {
 
 div.affix a.link-body-emphasis {
     font-weight: bold;
+}
+
+
+nav.navbar a.navbar-brand {
+    font-size: 1.5em;
+    font-family: 'Poppins', sans-serif;
+}
+
+h1,
+h2 {
+    font-family: 'Inter', 'M PLUS 2', sans-serif;
+    letter-spacing: -0.025em;
+    -font-weight: 900;
+}
+
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Montserrat', 'M PLUS 2', sans-serif;
+}
+
+h1.api {
+    -font-size: calc(1.3rem + 1.0vw);
+    font-weight: 300;
 }
