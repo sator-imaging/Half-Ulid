@@ -25,8 +25,8 @@ nav.navbar a.nav-link {
 }
 
 nav.navbar a.navbar-brand img {
-    height: 46px;
-    margin: 2px 0.3em 2px 0.2em;
+    height: 38px;
+    margin: 6px 0.4em 6px 0.2em;
 }
 
 nav.navbar a.navbar-brand img[src$="images/unity/made-with-unity.svg"] {
@@ -70,4 +70,8 @@ h2 {
     font-family: 'Inter', 'M PLUS 2', sans-serif;
     letter-spacing: -0.025em;
     font-weight: 900;
+}
+
+h3 {
+    font-weight: 200;
 }
