@@ -3,6 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?display=swap&family=M+PLUS+2:wght@200;300;900');
 @import url('https://fonts.googleapis.com/css2?display=swap&family=Poppins:wght@200;300;900');
 
+
+/** colors */
+
 body {
     --DISABLED--bs-link-color-rgb: 66, 184, 131 !important;
     --DISABLED--bs-link-hover-color-rgb: 64, 180, 128 !important;
@@ -11,6 +14,9 @@ body {
 nav.navbar i.bi {
     -color: #22cbe1;
 }
+
+
+/** navbar */
 
 nav.navbar a.navbar-brand,
 nav.navbar a.nav-link {
@@ -34,6 +40,9 @@ nav.navbar ul.dropdown-menu {
     width: max-content;
 }
 
+
+/** left side toc */
+
 nav.toc li>ul {
     display: block !important;
 }
@@ -42,10 +51,15 @@ nav.toc span.expand-stub {
     display: none !important;
 }
 
+
+/** affix */
+
 div.affix a.link-body-emphasis {
     font-weight: bold;
 }
 
+
+/** font styles */
 
 nav.navbar a.navbar-brand {
     font-size: 1.5em;
@@ -56,7 +70,7 @@ h1,
 h2 {
     font-family: 'Inter', 'M PLUS 2', sans-serif;
     letter-spacing: -0.025em;
-    -font-weight: 900;
+    font-weight: 900;
 }
 
 h3,
@@ -68,5 +82,5 @@ h6 {
 
 h1.api {
     -font-size: calc(1.3rem + 1.0vw);
-    font-weight: 300;
+    font-weight: 200;
 }
