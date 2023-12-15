@@ -17,6 +17,10 @@ nav.navbar i.bi {
 
 /** navbar */
 
+nav.navbar a.navbar-brand {
+    margin-left: 0.3em;
+}
+
 nav.navbar a.navbar-brand,
 nav.navbar a.nav-link {
     white-space: nowrap;
