@@ -48,9 +48,9 @@ function addApiHeadingBadge(event) {
             badge.style.verticalAlign = 'super';
             badge.classList.add("badge");
             badge.classList.add("bg-info");
-            apiTitle.innerText = apiTitle.innerText.replace(typeName, '');
+            apiTitle.innerText = apiTitle.innerText.replace(typeName, '') + ' ';
+            //apiTitle.parentNode.insertBefore(badge, apiTitle);
             apiTitle.appendChild(badge);
-            apiTitle.parentNode.insertBefore(badge, apiTitle);
         }
     }
 }
