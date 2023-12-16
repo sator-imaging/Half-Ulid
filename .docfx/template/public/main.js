@@ -41,13 +41,9 @@ function addApiHeadingBadge(event) {
         if (typeName) {
             let badge = document.createElement('span');
             badge.innerText = typeName;
-            badge.style.fontSize = '1rem';
-            badge.style.lineHeight = '1em';
-            badge.style.fontWeight = 200;
-            badge.style.letterSpacing = '0px';
-            badge.style.verticalAlign = 'super';
             badge.classList.add("badge");
             badge.classList.add("bg-info");
+            badge.classList.add("badge-api");
             apiTitle.innerText = apiTitle.innerText.replace(typeName, '') + ' ';
             //apiTitle.parentNode.insertBefore(badge, apiTitle);
             apiTitle.appendChild(badge);
