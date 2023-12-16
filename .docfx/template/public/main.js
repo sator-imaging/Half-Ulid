@@ -56,8 +56,7 @@ function addApiHeadingBadge(event) {
 }
 
 if (document.readyState == 'loading') {
-    window.addEventListener("DOMContentLoaded", ev => addBadge(ev));
-}
-else {
-    addBadge(undefined);
+    window.addEventListener("DOMContentLoaded", ev => addApiHeadingBadge(ev));
+} else {
+    addApiHeadingBadge(undefined);
 }
