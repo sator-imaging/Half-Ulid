@@ -27,7 +27,7 @@ export default {
 
 
 // badge for api heading
-window.addEventListener("DOMContentLoaded", (event) => {
+function addApiHeadingBadge(event) {
     let apiTitle = document.querySelector("h1.api");
     if (apiTitle) {
         let typeName = undefined;
@@ -53,5 +53,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
             apiTitle.parentNode.insertBefore(badge, apiTitle);
         }
     }
-    console.log("window.DOMContentLoaded");
-});
+}
+
+if (document.readyState == 'loading') {
+    window.addEventListener("DOMContentLoaded", ev => addBadge(ev));
+}
+else {
+    addBadge(undefined);
+}
