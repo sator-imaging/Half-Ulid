@@ -32,7 +32,7 @@ function addApiHeadingBadge(event) {
     if (apiTitle) {
         let badgeText = undefined;
 
-        if (apiTitle.dataset.commentid && apiTitle.dataset.commentid[1] == ':') {
+        if (apiTitle.dataset?.commentid?.at(1) == ':') {
             let pos = apiTitle.innerText.indexOf(' ');
             if (pos >= 0)
                 badgeText = apiTitle.innerText.slice(0, pos);

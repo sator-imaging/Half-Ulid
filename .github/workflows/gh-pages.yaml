@@ -55,8 +55,10 @@ jobs:
 
     - name: Generate README.md and index.md
       run: |
-        echo "# $(echo ${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/})" > README.md
-        echo "${{ github.server_url }}/${{ github.repository }}" >> README.md
+        if ! test -f 'README.md'; then
+          echo "# $(echo ${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/})" > README.md
+          echo "${{ github.server_url }}/${{ github.repository }}" >> README.md
+        fi
         if ! test -f 'index.md'; then
           mv 'README.md' 'index.md'
         fi
