@@ -17,7 +17,7 @@ Max 2,097,152 of IDs can be created for every milliseconds.
  +  
 `21-bit value` from 0 to 2,097,151
 
-> **Note**
+> [!Note]
 > `YearOffset` supports for 127 years from origin. (until A.D. 2149 Dec 31 by default)
 
 
