@@ -28,8 +28,7 @@ export default {
 
 // badge for api heading
 function initializePage(event) {
-    let apiTitle = document.querySelector("h1.api");
-    if (apiTitle) {
+    for (const apiTitle of document.querySelectorAll("h1.api")) {
         let badgeText = undefined;
 
         if (apiTitle.dataset?.commentid?.at(1) == ':') {
@@ -50,7 +49,7 @@ function initializePage(event) {
         }
     }
 
-    for (const elm in document.querySelectorAll(".toc ul>li, .toc ul>li>ul>li")) {
+    for (const elm of document.querySelectorAll(".toc ul>li, .toc ul>li>ul>li")) {
         elm.classList.add("expanded");
     }
 }
