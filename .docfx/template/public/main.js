@@ -33,7 +33,7 @@ function initializePage(event) {
         let isDeprecated = false;
         if (apiTitle.innerText.endsWith(' Deprecated')) {
             isDeprecated = true;
-            apiTitle.innerText.replace(/ Deprecated$/, '');
+            apiTitle.innerText = apiTitle.innerText.replace(/ Deprecated$/, '');
         }
 
         if (apiTitle.dataset?.commentid?.at(1) == ':') {
