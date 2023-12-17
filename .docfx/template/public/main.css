@@ -48,11 +48,13 @@ nav.navbar ul.dropdown-menu {
 /** left side toc */
 
 nav.toc li>ul {
-    display: block !important;
+    -display: block !important;
 }
 
 nav.toc span.expand-stub {
-    display: none !important;
+    -display: none !important;
+    padding-right: 0.2rem;
+    line-height: 1.2rem;
 }
 
 
@@ -73,11 +75,19 @@ div.affix a.link-body-emphasis {
     vertical-align: super;
 }
 
+h2.api {
+    position: relative;
+}
+
 
 /** content */
 
 .alert {
-    padding: 0.75rem 1.5rem 0px 1.5rem;
+    padding: 0.75rem 1.5rem;
+}
+
+.alert>*:last-child {
+    margin-bottom: 0.0rem;
 }
 
 
