@@ -4,6 +4,10 @@ using System.Security.Cryptography;
 
 namespace SatorImaging.HUlid
 {
+    /// <summary>
+    /// Half-ULID (HUlid) is a 64-bit (long) shrinked version of ULID.
+    /// Max 2,097,152 of IDs can be created for every milliseconds.
+    /// </summary>
     public static class HalfUlid
     {
         public const int ID_MAX = 2097151;  // 21-bit

@@ -11,18 +11,18 @@ Max 2,097,152 of IDs can be created for every milliseconds.
 
 
 
-# Structure
+## Structure
 
 `YearOffset(7) Month(4) Day(5) Hour(5) Minute(6) Second(6) Millisec(10)` 43-bit total  
  +  
 `21-bit value` from 0 to 2,097,151
 
-> [!Note]
+> [!NOTE]
 > `YearOffset` supports for 127 years from origin. (until A.D. 2149 Dec 31 by default)
 
 
 
-# HUlid v2 Design Note
+## HUlid v2 Design Note
 
 Half ULID version 2 stores year offset in 1-127 range, formerly in range from 0 to 127.
 
@@ -35,7 +35,7 @@ Updated design makes non-explicitly typed HUlid (a `double` primitive) identifia
 
 
 
-# Usage
+## Usage
 
 ```csharp
 using SatorImaging.HUlid;
@@ -75,13 +75,19 @@ if (value < HalfUlid.MinValue)
 
 
 
-# Copyright
+> [!NOTE]
+> See API Reference for further details.  
+> https://sator-imaging.github.io/Half-Ulid/api/SatorImaging.HUlid.html
+
+
+
+## Copyright
 
 Copyright &copy; 2023 Sator Imaging, all rights reserved.
 
 
 
-# License
+## License
 
 
 <p>
