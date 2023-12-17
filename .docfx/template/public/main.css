@@ -73,7 +73,7 @@ h2.api>.badge {
     line-height: 1em;
     font-weight: 300;
     letter-spacing: 0px;
-    vertical-align: super;
+    vertical-align: super !important;
 }
 
 h2.api {

@@ -49,7 +49,7 @@ function initializePage(event) {
         }
     }
 
-    for (const elm of document.querySelectorAll(".toc ul>li, .toc ul>li>ul>li")) {
+    for (const elm of document.querySelectorAll("nav.toc ul>li, nav.toc ul>li>ul>li")) {
         elm.classList.add("expanded");
     }
 }
