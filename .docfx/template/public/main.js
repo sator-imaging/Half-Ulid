@@ -40,6 +40,7 @@ function initializePage(event) {
             let pos = apiTitle.innerText.indexOf(' ');
             if (pos >= 0) {
                 badgeText = apiTitle.innerText.slice(0, pos);
+                apiTitle.innerText = apiTitle.innerText.slice(pos + 1);
                 if (isDeprecated) {
                     badgeText = "Deprecated " + badgeText;
                 }
@@ -56,7 +57,6 @@ function initializePage(event) {
                 badge.classList.add("bg-info");
             }
             badge.classList.add("rounded-pill");
-            apiTitle.innerText = apiTitle.innerText.replace(badgeText, '') + ' ';
             //apiTitle.parentNode.insertBefore(badge, apiTitle);
             apiTitle.appendChild(badge);
         }
