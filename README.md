@@ -6,21 +6,36 @@ Max 2,097,152 of IDs can be created for every milliseconds.
 
 - Unity Package Manager Installation URLs
     - Latest: https://github.com/sator-imaging/Half-Ulid.git
+    - v2: https://github.com/sator-imaging/Half-Ulid.git#v2.0.0
     - v1.3.0: https://github.com/sator-imaging/Half-Ulid.git#v1.3.0
 
 
 
-## Structure
+# Structure
 
 `YearOffset(7) Month(4) Day(5) Hour(5) Minute(6) Second(6) Millisec(10)` 43-bit total  
  +  
 `21-bit value` from 0 to 2,097,151
 
-*NOTE*: `YearOffset` supports for 128 years from origin. (until A.D. 2150 Dec 31 by default)
+> **Note**
+> `YearOffset` supports for 127 years from origin. (until A.D. 2149 Dec 31 by default)
 
 
 
-## Usage
+# HUlid v2 Design Note
+
+Half ULID version 2 stores year offset in 1-127 range, formerly in range from 0 to 127.
+
+The reason of update is that there are 2 famous epoch years, 1970 (UNIX) and 1900 (NTP). Those are used to calculate UNIX time and NTP time which are stored as elapsed time from epoch year.
+
+The minimum value of Half ULID v2 `HUlid.MinValue` is changed to extremely high number *144,115,188,075,855,872* (`1UL << 57`).
+It points around *A.D. 4,500,000* in UNIX time and when trying convert it to `DateTime` object, C# throws unhandled exception.
+
+Updated design makes non-explicitly typed HUlid (a `double` primitive) identifiable and meaningful.
+
+
+
+# Usage
 
 ```csharp
 using SatorImaging.HUlid;
@@ -29,35 +44,34 @@ using SatorImaging.HUlid;
 HalfUlid.Init(originYear: 2023);
 
 // generator method uses same creation time until next Init() call.
+// if sequence value overflows, call Init() with current time automatically
 var id = HalfUlid.Next();        // generate sequential id.
 id = HalfUlid.Next(offset: 10);  // custom offset;
 id = HalfUlid.Next(10);
 id = HalfUlid.Next(10);
 
-// generate id using random number and sequential value.
-var randomId = HaldUlid.Random();
-var seqValue = randomId & HalfUlid.RANDOM_ID_BITMASK;  // retrieve sequential part
+// retrieve value part of Half-Ulid.
+var val = HalfUlid.GetValue(id);
+
+// generate id using random number followed by sequential value.
+var randomId = HalfUlid.Random();
+var seq = HalfUlid.GetValueWithoutRandomBits(randomId);  // get sequential part only
+var val = HalfUlid.GetValue(randomId);                   // get value including random bits
 
 // retrieve creation time in UTC format.
-var createdAt = id.ToHUlidDateTime();
-createdAt = id.ToHUlidDateTime(originYear: 2023);  // retrieve with custom year origin.
+var createdAt = HalfUlid.GetDateTime(id);
+var createdAt = HalfUlid.GetDateTime(id, originYear: 2023);  // custom year origin.
 
-// retrieve value part of Half-Ulid.
-var value = id.ToHUlidValue();
-
-// DateTime.MinValue will be returned when failed to convert.
-if (0L.ToHUlidDateTime() == DateTime.MinValue)
+// TryGet* methods to validate HUlid value
+if (!HalfUlid.TryGetDateTime(0L, out var date))
+    thow new Exception();
+if (!HalfUlid.TryGetValue(0L, out var value))
     thow new Exception();
 
-// set custom creation time.
-HalfUlid.SetCreationTime(DateTime.Now);  // local time automatically converted to UTC time.
-
-// actual methods called from extension methods.
-value = HalfUlid.GetValue(value);
-createdAt = HalfUlid.GetDateTime(value, originYear: 2023);
+// -- or --
+if (value < HalfUlid.MinValue)
+    thow new Exception();
 ```
-
-
 
 
 

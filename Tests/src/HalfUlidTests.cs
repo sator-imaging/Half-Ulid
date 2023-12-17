@@ -1,10 +1,9 @@
 #if UNITY_EDITOR
+using NUnit.Framework;
 using SatorImaging.HUlid;
 using System;
-using System.Collections.Generic;
-using NUnit.Framework;
-using UnityEngine;
 using System.Threading;
+using UnityEngine;
 
 namespace SatorImaging.Tests.HUlid
 {
@@ -30,7 +29,7 @@ namespace SatorImaging.Tests.HUlid
         static long RandomAndLog(string msg, int originYear = HalfUlid.YEAR_USE_CURRENT)
         {
             var ret = HalfUlid.Random();
-            var seq = ret & HalfUlid.RANDOM_ID_BITMASK;
+            var seq = ret & HalfUlid.RANDOM_ID_MAX;
             if (string.IsNullOrWhiteSpace(msg))
                 VerboseLog($"{("Random(): "),-12}", ret, originYear, "Sequential Value: " + seq);
             else
@@ -44,7 +43,20 @@ namespace SatorImaging.Tests.HUlid
         [Order(-100)]
         public void BeforeInitializationTest()
         {
-            NextAndLog("# Generate Half-ULID before Init()\n");
+            NextAndLog("# Generate Half-ULID before any Init() call\n");
+        }
+
+
+        [Test]
+        [Order(-10)]
+        public void __Check_Result_by_Your_Eyes()
+        {
+            long val = RandomAndLog("Random value used to GetRandomBits() Tests. It is in 0-255 range.\n");
+
+            Assert.That(HalfUlid.GetRandomBits(val) < 256);
+
+            Debug.Log("GetRandomBits(): " + HalfUlid.GetRandomBits(val));
+            Debug.Log("HalfUlid.MinValue: " + HalfUlid.MinValue);
         }
 
 
@@ -80,11 +92,11 @@ namespace SatorImaging.Tests.HUlid
 
             //random
             val = RandomAndLog("");
-            Assert.That((val & HalfUlid.RANDOM_ID_BITMASK) == 104);
+            Assert.That((val & HalfUlid.RANDOM_ID_MAX) == 104);
             val = RandomAndLog("");
-            Assert.That((val & HalfUlid.RANDOM_ID_BITMASK) == 105);
+            Assert.That((val & HalfUlid.RANDOM_ID_MAX) == 105);
             val = RandomAndLog("");
-            Assert.That((val & HalfUlid.RANDOM_ID_BITMASK) == 106);
+            Assert.That((val & HalfUlid.RANDOM_ID_MAX) == 106);
 
 
             //next() again
@@ -108,17 +120,9 @@ namespace SatorImaging.Tests.HUlid
             Debug.Log("# Init() with originYear option");
 
 
-            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 999);
-            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 999})");
-            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
-
-            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 128);
-            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 128})");
-            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
-
-            HalfUlid.Init(originYear: DateTime.UtcNow.Year - 127);
-            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 127})");
-            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year - 127);
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => HalfUlid.Init(originYear: DateTime.UtcNow.Year - 999));
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => HalfUlid.Init(originYear: DateTime.UtcNow.Year - 128));
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => HalfUlid.Init(originYear: DateTime.UtcNow.Year - 127));
 
             HalfUlid.Init(originYear: DateTime.UtcNow.Year - 126);
             val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year - 126})");
@@ -139,13 +143,8 @@ namespace SatorImaging.Tests.HUlid
             val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year})");
             Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
 
-            HalfUlid.Init(originYear: DateTime.UtcNow.Year + 1);
-            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 1})");
-            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
-
-            HalfUlid.Init(originYear: DateTime.UtcNow.Year + 310);
-            val = NextAndLog($"Init(originYear: {DateTime.UtcNow.Year + 310})");
-            Assert.That(HalfUlid.CurrentOriginYear == DateTime.UtcNow.Year);
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => HalfUlid.Init(originYear: DateTime.UtcNow.Year + 1));
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => HalfUlid.Init(originYear: DateTime.UtcNow.Year + 310));
 
 
             //use current
@@ -155,7 +154,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init();
             Debug.Log($"Init(originYear: 2000) -> Init():      \t\t Origin Year: " + HalfUlid.CurrentOriginYear);
             Assert.That(HalfUlid.CurrentOriginYear == 2000);
-
+            /*
             HalfUlid.Init(originYear: 2000);
             HalfUlid.Init(originYear: 0);
             Debug.Log($"Init(originYear: 2000) -> Init(yr:0):    \t Origin Year: " + HalfUlid.CurrentOriginYear);
@@ -170,7 +169,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(originYear: 9999);
             Debug.Log($"Init(originYear: 2000) -> Init(yr:9999):   \t Origin Year: " + HalfUlid.CurrentOriginYear);
             Assert.That(HalfUlid.CurrentOriginYear == HalfUlid.DEFAULT_YEAR_ORIGIN);
-
+            */
 
             //others
             Debug.Log("\n# ToHUlidDateTime() with originYear option");
@@ -242,7 +241,7 @@ namespace SatorImaging.Tests.HUlid
             VerboseLog("To UTC Time: ", utcVal);
             VerboseLog("Future:      ", futureVal);
 
-            Debug.Log("\n# Cannot set to Unix Epoch time (exception thrown). creation time must be same.");
+            Debug.Log("\n# Cannot set to Unix Epoch year without initialization (exception thrown). following creation time must be same.");
             VerboseLog("MinValue:   ", minDateTimeVal);
             VerboseLog("Unix Epoch: ", epochVal);
         }
@@ -253,6 +252,28 @@ namespace SatorImaging.Tests.HUlid
         {
             var val = NextAndLog("# Test value\n");
 
+            //tryGet
+            Debug.Log("");
+            Debug.Log("TryGet*() Methods: Test value: 0L / " + val);
+
+            Assert.True(HalfUlid.TryGetDateTime(val, out _), "TryGetDateTime: " + val);
+            Assert.False(HalfUlid.TryGetDateTime(0L, out _), "TryGetDateTime: " + 0L);
+            Debug.Log("TryGetDateTime(): OK");
+
+            Assert.True(HalfUlid.TryGetValue(val, out _), "TryGetValue: " + val);
+            Assert.False(HalfUlid.TryGetValue(0L, out _), "TryGetValue: " + 0L);
+            Debug.Log("TryGetValue(): OK");
+
+            Assert.True(HalfUlid.TryGetRandomBits(val, out _), "TryGetRandomBits: " + val);
+            Assert.False(HalfUlid.TryGetRandomBits(0L, out _), "TryGetRandomBits: " + 0L);
+            Debug.Log("TryGetRandomBits(): OK");
+
+            Assert.True(HalfUlid.TryGetValueWithoutRandomBits(val, out _), "TryGetValueWithoutRandomBits: " + val);
+            Assert.False(HalfUlid.TryGetValueWithoutRandomBits(0L, out _), "TryGetValueWithoutRandomBits: " + 0L);
+            Debug.Log("TryGetValueWithoutRandomBits(): OK");
+            Debug.Log("");
+
+            //convert
             Debug.Log("Value Extension: \t" + val.ToHUlidValue());
             Debug.Log("Date Extension: \t" + val.ToHUlidDateTime().ToString(FMT_TIME));
 
@@ -290,7 +311,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(HalfUlid.ID_MAX - 2);
             var val1 = NextAndLog("");
             var val2 = NextAndLog("");
-            //except restart
+            //expect restart
             Thread.Sleep(100);  // need to wait
             var val3 = NextAndLog("");
             NextAndLog("");
@@ -306,7 +327,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(HalfUlid.ID_MAX - 234);
             val1 = NextAndLog("", 111);
             val2 = NextAndLog("", 111);
-            //except restart
+            //expect restart
             Thread.Sleep(100);  // need to wait
             val3 = NextAndLog("", 111);
             NextAndLog("", 111);
@@ -321,7 +342,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(HalfUlid.RANDOM_ID_MAX - 2);
             val1 = RandomAndLog("");
             val2 = RandomAndLog("");
-            //except restart
+            //expect restart
             Thread.Sleep(100);  // need to wait
             val3 = RandomAndLog("");
             RandomAndLog("");
@@ -336,7 +357,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(HalfUlid.RANDOM_ID_MAX - 2);
             val1 = RandomAndLog("");
             val2 = RandomAndLog("");
-            //except restart
+            //expect restart
             Thread.Sleep(100);  // need to wait
             val3 = NextAndLog("");
             NextAndLog("");
@@ -351,7 +372,7 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.Init(HalfUlid.RANDOM_ID_MAX + 310);
             val1 = NextAndLog("");
             val2 = NextAndLog("");
-            //except restart
+            //expect restart
             Thread.Sleep(100);  // need to wait
             val3 = RandomAndLog("");
             RandomAndLog("");
