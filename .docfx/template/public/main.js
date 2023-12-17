@@ -30,21 +30,22 @@ export default {
 function addApiHeadingBadge(event) {
     let apiTitle = document.querySelector("h1.api");
     if (apiTitle) {
-        let typeName = undefined;
-        if (apiTitle.dataset.commentid.startsWith("N:")) {
-            typeName = "Namespace";
-        }
-        else if (apiTitle.dataset.commentid.startsWith("T:")) {
-            typeName = "Class";
+        let badgeText = undefined;
+
+        if (apiTitle.dataset.commentid.startsWith("N:")
+            || apiTitle.dataset.commentid.startsWith("T:")) {
+            let pos = apiTitle.innerText.indexOf(' ');
+            if (pos >= 0)
+                badgeText = apiTitle.innerText.slice(0, pos);
         }
 
-        if (typeName) {
+        if (badgeText) {
             let badge = document.createElement('span');
-            badge.innerText = typeName;
+            badge.innerText = badgeText;
             badge.classList.add("badge");
             badge.classList.add("bg-info");
             badge.classList.add("badge-api");
-            apiTitle.innerText = apiTitle.innerText.replace(typeName, '') + ' ';
+            apiTitle.innerText = apiTitle.innerText.replace(badgeText, '') + ' ';
             //apiTitle.parentNode.insertBefore(badge, apiTitle);
             apiTitle.appendChild(badge);
         }

@@ -53,12 +53,12 @@ jobs:
           fi
         cd ..
 
-    - name: Move README.md as index.md
+    - name: Generate README.md and index.md
       run: |
-        if test -f 'README.md'; then
-          if ! test -f 'index.md'; then
-            mv 'README.md' 'index.md'
-          fi
+        echo "# $(echo '${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/}')" > README.md
+        echo "${{ github.server_url }}/${{ github.repository }}" >> README.md
+        if ! test -f 'index.md'; then
+          mv 'README.md' 'index.md'
         fi
 
     - run: dotnet tool update -g docfx

@@ -5,6 +5,7 @@
             "includePrivateMembers": false,
             "EnumSortOrder": "declaringOrder",
             "includeExplicitInterfaceImplementations": true,
+            "memberLayout": "separatePages",
             "src": [
                 {
                     "src": "../",
