@@ -27,7 +27,7 @@ export default {
 
 
 // badge for api heading
-function addApiHeadingBadge(event) {
+function initializePage(event) {
     let apiTitle = document.querySelector("h1.api");
     if (apiTitle) {
         let badgeText = undefined;
@@ -43,16 +43,20 @@ function addApiHeadingBadge(event) {
             badge.innerText = badgeText;
             badge.classList.add("badge");
             badge.classList.add("bg-info");
-            badge.classList.add("badge-api");
+            badge.classList.add("rounded-pill");
             apiTitle.innerText = apiTitle.innerText.replace(badgeText, '') + ' ';
             //apiTitle.parentNode.insertBefore(badge, apiTitle);
             apiTitle.appendChild(badge);
         }
     }
+
+    for (const elm in document.querySelectorAll(".toc ul>li, .toc ul>li>ul>li")) {
+        elm.classList.add("expanded");
+    }
 }
 
 if (document.readyState == 'loading') {
-    window.addEventListener("DOMContentLoaded", ev => addApiHeadingBadge(ev));
+    window.addEventListener("DOMContentLoaded", ev => initializePage(ev));
 } else {
-    addApiHeadingBadge(undefined);
+    initializePage(undefined);
 }

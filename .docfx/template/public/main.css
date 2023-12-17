@@ -67,8 +67,9 @@ div.affix a.link-body-emphasis {
 
 /** api page */
 
-.badge-api {
-    font-size: 1rem;
+h1.api>.badge,
+h2.api>.badge {
+    font-size: 0.4em;
     line-height: 1em;
     font-weight: 300;
     letter-spacing: 0px;
