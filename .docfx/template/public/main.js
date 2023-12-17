@@ -30,18 +30,31 @@ export default {
 function initializePage(event) {
     for (const apiTitle of document.querySelectorAll("h1.api")) {
         let badgeText = undefined;
+        let isDeprecated = false;
+        if (apiTitle.innerText.endsWith(' Deprecated')) {
+            isDeprecated = true;
+            apiTitle.innerText.replace(/ Deprecated$/, '');
+        }
 
         if (apiTitle.dataset?.commentid?.at(1) == ':') {
             let pos = apiTitle.innerText.indexOf(' ');
-            if (pos >= 0)
+            if (pos >= 0) {
                 badgeText = apiTitle.innerText.slice(0, pos);
+                if (isDeprecated) {
+                    badgeText = "Deprecated " + badgeText;
+                }
+            }
         }
 
         if (badgeText) {
             let badge = document.createElement('span');
             badge.innerText = badgeText;
             badge.classList.add("badge");
-            badge.classList.add("bg-info");
+            if (isDeprecated) {
+                badge.classList.add("text-bg-danger");
+            } else {
+                badge.classList.add("bg-info");
+            }
             badge.classList.add("rounded-pill");
             apiTitle.innerText = apiTitle.innerText.replace(badgeText, '') + ' ';
             //apiTitle.parentNode.insertBefore(badge, apiTitle);
@@ -50,10 +63,10 @@ function initializePage(event) {
     }
 
     setTimeout(() => {
-        for (const elm of document.querySelectorAll("nav.toc ul>li, nav.toc ul>li>ul>li")) {
+        for (const elm of document.querySelectorAll("nav.toc ul>li")) {
             elm.classList.add("expanded");
         }
-    }, 500);
+    }, 100);
 }
 
 if (document.readyState == 'loading') {
