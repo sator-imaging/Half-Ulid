@@ -26,8 +26,8 @@ export default {
 }
 
 
-// badge for api heading
 function initializePage(event) {
+    // badge for api heading
     for (const apiTitle of document.querySelectorAll("h1.api")) {
         let badgeText = undefined;
         let isDeprecated = false;
@@ -57,8 +57,21 @@ function initializePage(event) {
                 badge.classList.add("bg-info");
             }
             badge.classList.add("rounded-pill");
-            //apiTitle.parentNode.insertBefore(badge, apiTitle);
             apiTitle.appendChild(badge);
+        }
+    }
+
+    // badge for affix
+    for (const affix of document.querySelectorAll('body[data-yaml-mime=ApiPage] div.affix .link-body-emphasis')) {
+        if (affix.innerText.endsWith(' Deprecated')) {
+            affix.innerText = affix.innerText.replace(/ Deprecated$/, '');
+
+            let badge = document.createElement('span');
+            badge.innerText = '✖️';
+            badge.classList.add("badge");
+            badge.classList.add("text-bg-danger");
+            badge.classList.add("rounded-pill");
+            affix.appendChild(badge);
         }
     }
 

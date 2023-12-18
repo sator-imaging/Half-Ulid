@@ -60,6 +60,10 @@ nav.toc span.expand-stub {
 
 /** affix */
 
+body[data-yaml-mime=ApiPage] div.affix .badge {
+    vertical-align: super;
+}
+
 body[data-yaml-mime=ApiPage] div.affix .link-body-emphasis {
     font-size: 1.1em;
 }
