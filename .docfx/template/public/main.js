@@ -61,21 +61,22 @@ function initializePage(event) {
         }
     }
 
-    // badge for affix
-    for (const affix of document.querySelectorAll('body[data-yaml-mime=ApiPage] div.affix .link-body-emphasis')) {
-        if (affix.innerText.endsWith(' Deprecated')) {
-            affix.innerText = affix.innerText.replace(/ Deprecated$/, '');
-
-            let badge = document.createElement('span');
-            badge.innerText = '✖️';
-            badge.classList.add("badge");
-            badge.classList.add("text-bg-danger");
-            badge.classList.add("rounded-pill");
-            affix.appendChild(badge);
-        }
-    }
-
     setTimeout(() => {
+        // badge for affix
+        for (const affix of document.querySelectorAll('body[data-yaml-mime=ApiPage] div.affix .link-body-emphasis')) {
+            if (affix.innerText.endsWith(' Deprecated')) {
+                affix.innerText = affix.innerText.replace(/ Deprecated$/, '');
+
+                let badge = document.createElement('span');
+                badge.innerText = '✖️';
+                badge.classList.add("badge");
+                badge.classList.add("text-bg-danger");
+                badge.classList.add("rounded-pill");
+                affix.appendChild(badge);
+            }
+        }
+
+        // toc auto expand
         for (const elm of document.querySelectorAll("nav.toc>*>ul>li>ul>li")) {
             elm.classList.add("expanded");
         }
