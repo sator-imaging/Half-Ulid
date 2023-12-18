@@ -6,7 +6,7 @@ Max 2,097,152 of IDs can be created for every milliseconds.
 
 - Unity Package Manager Installation URLs
     - Latest: https://github.com/sator-imaging/Half-Ulid.git
-    - v2: https://github.com/sator-imaging/Half-Ulid.git#v2.0.0
+    - v2.0.0: https://github.com/sator-imaging/Half-Ulid.git#v2.0.0
     - v1.3.0: https://github.com/sator-imaging/Half-Ulid.git#v1.3.0
 
 
@@ -69,7 +69,7 @@ if (!HalfUlid.TryGetValue(0L, out var value))
     thow new Exception();
 
 // -- or --
-if (value < HalfUlid.MinValue)
+if ((ulong)value < HalfUlid.MinValue)
     thow new Exception();
 ```
 
