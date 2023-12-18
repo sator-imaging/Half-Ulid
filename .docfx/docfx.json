@@ -36,7 +36,7 @@
         "globalMetadata": {
             "_appTitle": "Half ULID for C# / Unity",
             "_appName": "Half ULID",
-            "_appFooter": "&copy; 2023 Sator Imaging &nbsp; <small>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a> + <a href=\"\">sator-imaging/docfx-unity</a></small>",
+            "_appFooter": "&copy; 2023 Sator Imaging &nbsp; <small>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a> + <a href=\"https://github.com/sator-imaging/docfx-pages\">sator-imaging/docfx-pages</a></small>",
             "_appLogoPath": "images/wikimedia-commons/logo-csharp.svg",
             "_appFaviconPath": "images/wikimedia-commons/logo-csharp.svg",
             "pdf": false,
