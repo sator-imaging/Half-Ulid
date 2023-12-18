@@ -65,7 +65,7 @@ function initializePage(event) {
         // badge for affix
         for (const affix of document.querySelectorAll('body[data-yaml-mime=ApiPage] div.affix .link-body-emphasis')) {
             if (affix.innerText.endsWith(' Deprecated')) {
-                affix.innerText = affix.innerText.replace(/ Deprecated$/, '');
+                affix.innerText = affix.innerText.replace(/ Deprecated$/, '') + ' ';
 
                 let badge = document.createElement('span');
                 badge.innerText = '✖️';
