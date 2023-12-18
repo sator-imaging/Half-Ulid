@@ -31,7 +31,7 @@ The reason of update is that there are 2 famous epoch years, 1970 (UNIX) and 190
 The minimum value of Half ULID v2 `HUlid.MinValue` is changed to extremely high number *144,115,188,075,855,872* (`1UL << 57`).
 It points around *A.D. 4,500,000* in UNIX time and when trying convert it to `DateTime` object, C# throws unhandled exception.
 
-Updated design makes non-explicitly typed HUlid (a `double` primitive) identifiable and meaningful.
+Updated design makes non-explicitly typed HUlid (a `long` primitive) identifiable and meaningful.
 
 
 

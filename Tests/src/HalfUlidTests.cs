@@ -196,6 +196,18 @@ namespace SatorImaging.Tests.HUlid
 
 
         [Test]
+        public void ExceptionTest()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => HalfUlid.GetTimeBits(DateTime.MinValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() => HalfUlid.SetCreationTime(DateTime.MinValue));
+
+            var future = DateTime.UtcNow.AddYears(310);
+            Assert.Throws<ArgumentOutOfRangeException>(() => HalfUlid.GetTimeBits(future));
+            Assert.Throws<ArgumentOutOfRangeException>(() => HalfUlid.SetCreationTime(future));
+        }
+
+
+        [Test]
         public void SetCreationTimeTest()
         {
             var localNow = DateTime.Now;
@@ -222,27 +234,20 @@ namespace SatorImaging.Tests.HUlid
             HalfUlid.SetCreationTime(future);
             var futureVal = HalfUlid.Next();
 
-            //minValue
-            HalfUlid.SetCreationTime(DateTime.MinValue);
-            var minDateTimeVal = HalfUlid.Next();
-
-            Assert.That(futureVal.ToHUlidDateTime() != minDateTimeVal.ToHUlidDateTime());  //minValue use current time
-
-
             //exception
-            Assert.Throws<Exception>(() => HalfUlid.SetCreationTime(unixEpoch));
+            Assert.Throws<ArgumentOutOfRangeException>(() => HalfUlid.SetCreationTime(DateTime.MinValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() => HalfUlid.SetCreationTime(unixEpoch));
             var epochVal = HalfUlid.Next();
 
             // creation time cannot be set before origin year.
-            Assert.That(epochVal.ToHUlidDateTime() == minDateTimeVal.ToHUlidDateTime());
+            Assert.That(epochVal.ToHUlidDateTime() == futureVal.ToHUlidDateTime());
 
 
             VerboseLog("Local Time:  ", localVal);
             VerboseLog("To UTC Time: ", utcVal);
             VerboseLog("Future:      ", futureVal);
 
-            Debug.Log("\n# Cannot set to Unix Epoch year without initialization (exception thrown). following creation time must be same.");
-            VerboseLog("MinValue:   ", minDateTimeVal);
+            Debug.Log("\n# Cannot set to Unix Epoch year without initialization (exception thrown). creation time must not be changed from above.");
             VerboseLog("Unix Epoch: ", epochVal);
         }
 
@@ -280,8 +285,6 @@ namespace SatorImaging.Tests.HUlid
             Debug.Log("Value Method: \t" + HalfUlid.GetValue(val));
             Debug.Log("Date Method: \t" + HalfUlid.GetDateTime(val).ToString(FMT_TIME));
 
-            Debug.Log("\n# GetTimeBits(DateTime.MinValue)\nValue: \t" + HalfUlid.GetTimeBits(DateTime.MinValue).ToHUlidValue());
-            Debug.Log("Date: \t" + HalfUlid.GetTimeBits(DateTime.MinValue).ToHUlidDateTime().ToString(FMT_TIME));
 
 
             // what happens??

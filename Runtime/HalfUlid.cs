@@ -20,7 +20,7 @@ namespace SatorImaging.HUlid
         [Obsolete("v2 update: this value is `CurrentOriginYear - 1`, not actual origin year.")]
         static int _currentOriginYear = DEFAULT_YEAR_ORIGIN;
         static long _currentValue = DEFAULT_START_VALUE;
-        static long _timeBits = GetTimeBits(DateTime.MinValue);  //long.MinValue;
+        static long _timeBits = GetTimeBits(DateTime.UtcNow);
         static bool _isRandomized = false;
 
         public const int RANDOM_ID_MAX = 8191;  // 13-bit
@@ -30,7 +30,14 @@ namespace SatorImaging.HUlid
         readonly static RandomNumberGenerator _rng = RandomNumberGenerator.Create();
         readonly static byte[] _randomBytes = new byte[1];
 
-        public const long MinValue = 1L << 57;
+        // NOTE: long is easier than ulong to use in C#. many of parameters in C# are long, not ulong.
+        //       of course Unity follows that. Unity uses long in many places even if it is treated
+        //       as ulong in native code, for example, object path id.
+        //       when change HUlid value to ulong, many of casting is required in tons of C# codes.
+        //       so HUlid value should be long for usability but when comparing with MinValue, values
+        //       must be treated as ulong.
+        //       defining MinValue as ulong will shows warning and remind that. do not mind consistency.
+        public const ulong MinValue = 1UL << 57;
 
         // properties
         public static int CurrentOriginYear => _currentOriginYear + 1;
@@ -38,6 +45,7 @@ namespace SatorImaging.HUlid
 
         ///<summary>Initialize with default or current start value and last or default origin year.</summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Init() => Init(DEFAULT_START_VALUE, YEAR_USE_CURRENT);
 
         /// <exception cref="ArgumentOutOfRangeException"></exception>
@@ -56,35 +64,35 @@ namespace SatorImaging.HUlid
                 _currentOriginYear = originYear;
             }
 
-            SetCreationTime(DateTime.MinValue);
+            SetCreationTime(DateTime.UtcNow);
         }
 
 
         ///<param name="utcTime">Non-UTC time is automatically converted to UTC time.</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static long GetTimeBits(DateTime utcTime)
         {
-            if (utcTime == DateTime.MinValue)
-                utcTime = DateTime.UtcNow;
             if (utcTime.Kind != DateTimeKind.Utc)
                 utcTime = utcTime.ToUniversalTime();
 
-            // check origin
-            if (utcTime.Year < _currentOriginYear + 1)
-                throw new Exception("cannot set creation time before origin year.");
+            //overflow??
+            var yearOffset = utcTime.Year - _currentOriginYear;
+            if (yearOffset < 1 || yearOffset > YEAR_MAX)
+                throw new ArgumentOutOfRangeException(nameof(utcTime), "yearOffset overflows");
 
-            // datetime in UPPER bits.
-            long ret = ((long)(utcTime.Year - _currentOriginYear) << 57)
-                     | ((long)utcTime.Month << 53)
-                     | ((long)utcTime.Day << 48)
-                     | ((long)utcTime.Hour << 43)
-                     | ((long)utcTime.Minute << 37)
-                     | ((long)utcTime.Second << 31)
-                     | ((long)utcTime.Millisecond << 21)
-                     ;
-            return ret;
+            return ((long)yearOffset << 57)
+                 | ((long)utcTime.Month << 53)
+                 | ((long)utcTime.Day << 48)
+                 | ((long)utcTime.Hour << 43)
+                 | ((long)utcTime.Minute << 37)
+                 | ((long)utcTime.Second << 31)
+                 | ((long)utcTime.Millisecond << 21)
+                 ;
         }
 
         ///<param name="utcTime">Non-UTC time is automatically converted to UTC time.</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetCreationTime(DateTime utcTime)
         {
             _timeBits = GetTimeBits(utcTime);
@@ -151,21 +159,21 @@ namespace SatorImaging.HUlid
         public static bool TryGetValue(long hulid, out int value)
         {
             value = GetValue(hulid);
-            return hulid >= MinValue;
+            return (ulong)hulid >= MinValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryGetValueWithoutRandomBits(long hulid, out int value)
         {
             value = GetValueWithoutRandomBits(hulid);
-            return hulid >= MinValue;
+            return (ulong)hulid >= MinValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool TryGetRandomBits(long hulid, out int value)
         {
             value = GetRandomBits(hulid);
-            return hulid >= MinValue;
+            return (ulong)hulid >= MinValue;
         }
 
 
@@ -188,7 +196,7 @@ namespace SatorImaging.HUlid
         ///<returns>DateTime.MinValue when error.</returns>
         public static DateTime GetDateTime(long val, int originYear = YEAR_USE_CURRENT)
         {
-            if (val < MinValue)
+            if ((ulong)val < MinValue)
                 return DateTime.MinValue;
 
             if (originYear <= YEAR_USE_CURRENT)
