@@ -63,10 +63,10 @@ function initializePage(event) {
     }
 
     setTimeout(() => {
-        for (const elm of document.querySelectorAll("nav.toc ul>li")) {
+        for (const elm of document.querySelectorAll("nav.toc>*>ul>li>ul>li")) {
             elm.classList.add("expanded");
         }
-    }, 100);
+    }, 256);
 }
 
 if (document.readyState == 'loading') {
