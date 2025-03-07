@@ -1,9 +1,24 @@
 using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 namespace SatorImaging.HUlid
 {
+    // TODO: make class non-static or struct for use in multi-threaded apps.
+    // TODO v3: to make everything simplified, use elapsed milliseconds from origin DateTime instead of transforming value of year, month, etc.
+    //          43bits can represent about 279 years from origin (v2: 127 years)
+    //          * as like v2 update, always add 1 year offset to every HalfUlid creation date to make untyped long value identifiable
+    //          --> 1 year in msecs: 31_536_000_000
+    //          --> shift << 21bits: 66_135_785_472_000_000
+    //          or, always set most-significant bit to make it extreme number.
+    //          42 bits still be able to represent about 139 years in milliseconds.
+    //          --> but sort order is broken (newer-to-older in creation time)
+    //          --> use most significant bit to determine overflow?
+    //          --> DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+    //          * GUID v7 uses 48 bits room for elapsed milliseconds from UNIX epoch millis to embed creation time
+    //            when 64 bit long, remaining 16 bits room can store 65,536 unique number, 15 bits stores 32,768 if most-significant bit is reserved
+    //          * simply taking upper 64bits from GUID v7 seems good but Unity doesn't support it.
     /// <summary>
     /// Half-ULID (HUlid) is a 64-bit (long) shrinked version of ULID.
     /// Max 2,097,152 of IDs can be created for every milliseconds.
@@ -17,7 +32,7 @@ namespace SatorImaging.HUlid
         public const int DEFAULT_YEAR_ORIGIN = 2023 - 1;  // v2 update: -1 to make year offset starts from 1
         public const int DEFAULT_START_VALUE = -1;
 
-        [Obsolete("v2 update: this value is `CurrentOriginYear - 1`, not actual origin year.")]
+        [DescriptionAttribute("v2 update: this value is `CurrentOriginYear - 1`, not actual origin year.")]
         static int _currentOriginYear = DEFAULT_YEAR_ORIGIN;
         static long _currentValue = DEFAULT_START_VALUE;
         static long _timeBits = GetTimeBits(DateTime.UtcNow);
@@ -43,22 +58,29 @@ namespace SatorImaging.HUlid
         public static int CurrentOriginYear => _currentOriginYear + 1;
 
 
-        ///<summary>Initialize with default or current start value and last or default origin year.</summary>
+        /// <summary>
+        /// Initialize creation time used for subsequent <see cref="Next(int)"/> or <see cref="Random()"/> calls.
+        /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Init() => Init(DEFAULT_START_VALUE, YEAR_USE_CURRENT);
 
+        /// <inheritdoc cref="Init()"/>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static void Init(int startValue = DEFAULT_START_VALUE, int originYear = YEAR_USE_CURRENT)
         {
             _isRandomized = false;
-            _currentValue = Math.Max(DEFAULT_START_VALUE, startValue);
+
+            if (startValue < DEFAULT_START_VALUE)
+                startValue = DEFAULT_START_VALUE;
+
+            _currentValue = startValue;
 
             if (originYear > YEAR_USE_CURRENT)
             {
                 originYear -= 1;  // v2 stores year offset in range 1-127
                 var yearOffset = DateTime.UtcNow.Year - originYear;
-                if (yearOffset < 1 || yearOffset > YEAR_MAX)
+                if (yearOffset <= 0 || yearOffset > YEAR_MAX)
                     throw new ArgumentOutOfRangeException(nameof(originYear));
 
                 _currentOriginYear = originYear;
@@ -77,7 +99,7 @@ namespace SatorImaging.HUlid
 
             //overflow??
             var yearOffset = utcTime.Year - _currentOriginYear;
-            if (yearOffset < 1 || yearOffset > YEAR_MAX)
+            if (yearOffset <= 0 || yearOffset > YEAR_MAX)
                 throw new ArgumentOutOfRangeException(nameof(utcTime), "yearOffset overflows");
 
             return ((long)yearOffset << 57)
@@ -103,7 +125,11 @@ namespace SatorImaging.HUlid
         ///<remarks>Init() is automatically called when maximum id for current creation time is reached.</remarks>
         public static long Next(int offset = 1)
         {
-            _currentValue += Math.Max(1, offset);
+            if (offset <= 0)
+                offset = 1;
+
+            _currentValue += offset;
+
             if (_currentValue > ID_MAX || (_isRandomized && _currentValue > RANDOM_ID_MAX))
                 Init(startValue: 0);
 
@@ -121,6 +147,16 @@ namespace SatorImaging.HUlid
             _currentValue++;
             _rng.GetNonZeroBytes(_randomBytes);
             return _timeBits | ((long)_randomBytes[0] << RANDOM_ID_SEQ_BIT_LENGTH) | _currentValue;
+        }
+
+
+        /// <summary>
+        /// Set creation date and generate new Half-ULID. (shorthand for <c>Init(); Next/Random();</c>)
+        /// </summary>
+        public static long New(bool randomOrSequential)
+        {
+            Init();
+            return randomOrSequential ? Random() : Next();
         }
 
 
@@ -233,7 +269,6 @@ namespace SatorImaging.HUlid
 
             return DateTime.MinValue;
         }
-
 
     }
 }
